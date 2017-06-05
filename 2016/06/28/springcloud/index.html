@@ -1,0 +1,799 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="eureka,ribbon,springcloud,zuul,Hystrix," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="spring cloud 总结eureka实现思路在com.netflix.discovery.DiscoveryClient启动的时候，会初始化一个定时任务，定时的把本地的服务配置信息，即需要注册到远端的服务信息自动刷新到注册服务器上。
+eureka优势zk优点：
+Eureka提供了一个客户端库，该库提供了服务心跳、服务健康检查、自动发布及缓存刷新等功能。
+如果使用ZooKeeper，这些功能都">
+<meta property="og:type" content="article">
+<meta property="og:title" content="springcloud">
+<meta property="og:url" content="http://yoursite.com/2016/06/28/springcloud/index.html">
+<meta property="og:site_name" content="Mr.栋">
+<meta property="og:description" content="spring cloud 总结eureka实现思路在com.netflix.discovery.DiscoveryClient启动的时候，会初始化一个定时任务，定时的把本地的服务配置信息，即需要注册到远端的服务信息自动刷新到注册服务器上。
+eureka优势zk优点：
+Eureka提供了一个客户端库，该库提供了服务心跳、服务健康检查、自动发布及缓存刷新等功能。
+如果使用ZooKeeper，这些功能都">
+<meta property="og:updated_time" content="2017-05-11T07:51:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="springcloud">
+<meta name="twitter:description" content="spring cloud 总结eureka实现思路在com.netflix.discovery.DiscoveryClient启动的时候，会初始化一个定时任务，定时的把本地的服务配置信息，即需要注册到远端的服务信息自动刷新到注册服务器上。
+eureka优势zk优点：
+Eureka提供了一个客户端库，该库提供了服务心跳、服务健康检查、自动发布及缓存刷新等功能。
+如果使用ZooKeeper，这些功能都">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/06/28/springcloud/"/>
+
+
+
+
+
+  <title>springcloud | Mr.栋</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mr.栋</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/06/28/springcloud/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zhang dong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.栋">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">springcloud</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-28T17:14:07+08:00">
+                2016-06-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="spring-cloud-总结"><a href="#spring-cloud-总结" class="headerlink" title="spring cloud 总结"></a>spring cloud 总结</h2><h3 id="eureka"><a href="#eureka" class="headerlink" title="eureka"></a>eureka</h3><h4 id="实现思路"><a href="#实现思路" class="headerlink" title="实现思路"></a>实现思路</h4><p>在com.netflix.discovery.DiscoveryClient启动的时候，会初始化一个定时任务，定时的把本地的服务配置信息，即需要注册到远端的服务信息自动刷新到注册服务器上。</p>
+<h4 id="eureka优势zk"><a href="#eureka优势zk" class="headerlink" title="eureka优势zk"></a>eureka优势zk</h4><p>优点：</p>
+<p>Eureka提供了一个客户端库，该库提供了服务心跳、服务健康检查、自动发布及缓存刷新等功能。</p>
+<p>如果使用ZooKeeper，这些功能都需要自己实现，并且zookeeper通过心跳发现服务不可用时，会立即删除注册到zookeeper的服务；而eureka不会立即删除服务，因为注册的服务有可能只是因为网络轻微波动导致无法发送心跳，并不是服务不可用。</p>
+<p>Eureka在客户端会有缓存。即使所有Eureka服务器不可用，服务注册信息也不会丢失。缓存在这里是恰当的，因为它只在所有的Eureka服务器都没响应的情况下才会用到。</p>
+<p>Eureka使用Ribbon组件实现客户端负载均衡策略<br><a id="more"></a><br>缺点：</p>
+<p>当所有服务端都同时停止之后，然后重启，客户端需要等待一定时间（最长30s，因为客户端会30s请求一次eureka注册中心）才能连接服务端，因为虽然在注册中心显示服务端已经注册，但是服务有可能还没有全启动，所以需要等待（其实也不像缺点–！）</p>
+<h3 id="ribbon"><a href="#ribbon" class="headerlink" title="ribbon"></a>ribbon</h3><p>默认负载均衡方式（轮询）</p>
+<h4 id="主要组件"><a href="#主要组件" class="headerlink" title="主要组件"></a>主要组件</h4><table>
+<thead>
+<tr>
+<th>组件</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IRule</td>
+<td>负载均衡策略,可以插件化的为LB提供各种适用的负载均衡算法  </td>
+</tr>
+<tr>
+<td>Iping</td>
+<td>判断目标服务是否存活 对应不同的协议不同的方式去探测，得到后端服务是否存活。如有http的，还有对于微服务框架内的服务存活的NIWSDiscoveryPing是通过eureka client来获取的instanceinfo中的信息来获取。 </td>
+</tr>
+<tr>
+<td>LoadBalancerStats</td>
+<td>LB运行信息 记录LB的实时运行信息，这些运行信息可以被用来作为LB策略的输入。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>策略名</th>
+<th>策略描述</th>
+<th>实现说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BestAvailableRule</td>
+<td>选择一个最小的并发请求的server</td>
+<td>逐个考察Server，如果Server被tripped了，则忽略，在选择其中ActiveRequestsCount最小的server</td>
+</tr>
+<tr>
+<td>AvailabilityFilteringRule</td>
+<td>过滤掉那些因为一直连接失败的被标记为circuit tripped的后端server，并过滤掉那些高并发的的后端server（active connections 超过配置的阈值）</td>
+<td>使用一个AvailabilityPredicate来包含过滤server的逻辑，其实就就是检查status里记录的各个server的运行状态</td>
+</tr>
+<tr>
+<td>WeightedResponseTimeRule</td>
+<td>根据相应时间分配一个weight，相应时间越长，weight越小，被选中的可能性越低。</td>
+<td>一个后台线程定期的从status里面读取评价响应时间，为每个server计算一个weight。Weight的计算也比较简单responsetime 减去每个server自己平均的responsetime是server的权重。当刚开始运行，没有形成statas时，使用roubine策略选择server。</td>
+</tr>
+<tr>
+<td>RetryRule</td>
+<td>对选定的负载均衡策略机上重试机制。</td>
+<td>在一个配置时间段内当选择server不成功，则一直尝试使用subRule的方式选择一个可用的server</td>
+</tr>
+<tr>
+<td>RoundRobinRule</td>
+<td>roundRobin方式轮询选择server</td>
+<td>轮询index，选择index对应位置的server</td>
+</tr>
+<tr>
+<td>RandomRule</td>
+<td>随机选择一个server</td>
+<td>在index上随机，选择index对应位置的server</td>
+</tr>
+<tr>
+<td>ZoneAvoidanceRule</td>
+<td>复合判断server所在区域的性能和server的可用性选择server</td>
+<td>使用ZoneAvoidancePredicate和AvailabilityPredicate来判断是否选择某个server，前一个判断判定一个zone的运行性能是否可用，剔除不可用的zone（的所有server），AvailabilityPredicate用于过滤掉连接数过多的Server。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="zuul"><a href="#zuul" class="headerlink" title="zuul"></a>zuul</h3><p>适合做路由和方向代理，通常接入外网的服务可以借助该服务，或者除springcloud项目其他语言写的服务也可以用该服务作为反向代理。</p>
+<p>1.支持动态从eureka读取service_id，通过小写service_id为路径转发到相应服务</p>
+<p>2.支持手动文件配置方式，配置转发<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">zuul:</span><br><span class="line">  routes:</span><br><span class="line">    get:</span><br><span class="line">      path: /get/**</span><br><span class="line">      url: http://127.0.0.1:9099</span><br><span class="line">    my-service:</span><br><span class="line">      path: /BESTBUY-WX/**</span><br><span class="line">      serviceId: BESTBUY-WX</span><br><span class="line">    images:</span><br><span class="line">      path: /image/**</span><br><span class="line">      url: http://httpbin.org/image</span><br></pre></td></tr></table></figure></p>
+<p>3.zuul参数设置</p>
+<p>zuul.host.maxTotalConnections</p>
+<p>适用于ApacheHttpClient，如果是okhttp无效。每个服务的http客户端连接池最大连接，默认是200.</p>
+<p>zuul.host.maxPerRouteConnections</p>
+<p>适用于ApacheHttpClient，如果是okhttp无效。每个route可用的最大连接数，默认值是20。</p>
+<p>zuul.semaphore.max-semaphores</p>
+<p>Hystrix最大的并发请求 execution.isolation.semaphore.maxConcurrentRequests ，这个值并非 TPS 、 QPS 、 RPS 等都是相对值，指的是1秒时间窗口内的事务/查询/请求， semaphore.maxConcurrentRequests 是一个绝对值，无时间窗口，相当于亚毫秒级的。当请求达到或超过该设置值后，其其余就会被拒绝。默认值是100。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">zuul.host.maxTotalConnections: 200</span><br><span class="line">zuul.host.maxPerRouteConnections: 10</span><br><span class="line">#zuul.semaphore.max-semaphores: 128</span><br><span class="line"># 建议使用这种方式来设置，可以给每个不同的后端微服务设置不同的信号量</span><br><span class="line">zuul.eureka.[service id].semaphore.maxSemaphores: 128</span><br></pre></td></tr></table></figure>
+<h3 id="Hystrix"><a href="#Hystrix" class="headerlink" title="Hystrix"></a>Hystrix</h3><p>断路器</p>
+<p>用于服务之间调用长时间无返回时自动失败策略<br>配置timeout</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@HystrixCommand(fallbackMethod = &quot;timeout&quot;, commandProperties = &#123;</span><br><span class="line">           @HystrixProperty(name = &quot;execution.isolation.thread.timeoutInMilliseconds&quot;, value = &quot;3000&quot;)</span><br><span class="line">   &#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="sleuth-zipkin"><a href="#sleuth-zipkin" class="headerlink" title="sleuth zipkin"></a>sleuth zipkin</h3><p>在spring cloud项目中sleth实现了一个分布式探针跟踪解决方案，借用了Dapper、zipkin和Htrace的思想；</p>
+<p>对于大多数用户来说探针是无感知的，并且能看到与其他系统的调用关系；</p>
+<p>我们可以把数据记录到日志文件，或将数据发送到远程收集服务；</p>
+<p>术语：</p>
+<p>Span: sleuth工作的基本单位，span是由一个独特的唯一的id和Trace的id组成一部分；这其中也包含一些描述、时间戳事件、key-value注解和进程ID的（通常为IP地址）；</p>
+<p>span有开始就有结束</p>
+<p>Trace：一组span形成的树状结构的表示，trace ID是全局唯一的；例如：调用service1的服务接口，该接口又调用service2的接口，两个接口之间通过trace来唯一表示这次完整的树状请求结构；</p>
+<p>Annotation：用于记录一个事件的存在时间。用于定义一个请求的开始和停止的核心注释</p>
+<pre><code>cs：Client Sent 客户机发送-客户端已经提出了要求。此注释描述了跨度的开始。
+sr：Server Received 服务器端收到的请求，并将开始处理它。如果减去CS时间戳从这个时间戳人会收到网络延迟。
+ss：Server Sent 完成请求处理后发送的服务（当响应返回到客户端时）。如果减去SR时间戳从这个时间戳将接收由服务器端处理请求所需的时间。
+cr：Client Received 客户端接收到的-表示span的结束。客户端已成功接收来自服务器端的响应。如果减去CS时间戳从这个时间戳人会收到由客户端需要从服务器接收响应的整个时间
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/eureka/" rel="tag"># eureka</a>
+          
+            <a href="/tags/ribbon/" rel="tag"># ribbon</a>
+          
+            <a href="/tags/springcloud/" rel="tag"># springcloud</a>
+          
+            <a href="/tags/zuul/" rel="tag"># zuul</a>
+          
+            <a href="/tags/Hystrix/" rel="tag"># Hystrix</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/22/bug/" rel="next" title="bug">
+                <i class="fa fa-chevron-left"></i> bug
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/11/docker/" rel="prev" title="docker">
+                docker <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="zhang dong" />
+          <p class="site-author-name" itemprop="name">zhang dong</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#spring-cloud-总结"><span class="nav-number">1.</span> <span class="nav-text">spring cloud 总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#eureka"><span class="nav-number">1.1.</span> <span class="nav-text">eureka</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实现思路"><span class="nav-number">1.1.1.</span> <span class="nav-text">实现思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#eureka优势zk"><span class="nav-number">1.1.2.</span> <span class="nav-text">eureka优势zk</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ribbon"><span class="nav-number">1.2.</span> <span class="nav-text">ribbon</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#主要组件"><span class="nav-number">1.2.1.</span> <span class="nav-text">主要组件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zuul"><span class="nav-number">1.3.</span> <span class="nav-text">zuul</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hystrix"><span class="nav-number">1.4.</span> <span class="nav-text">Hystrix</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sleuth-zipkin"><span class="nav-number">1.5.</span> <span class="nav-text">sleuth zipkin</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhang dong</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,722 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="docker1.12 Swarm 模式简介1.Docker Engine 1.12 集成了Swarm集群工具.
+2.主要使用三个新的命令行工具创建一个swarm集群:
+docker swarm 开启swarm模式; 加入Swarm集群; 配置集群参数
+docker node 查询集群节点信息; 提升/移除一个管理节点; 管理swarm节点主机
+docker service 创建管理 service">
+<meta property="og:type" content="article">
+<meta property="og:title" content="swarm集群运行springboot服务">
+<meta property="og:url" content="http://yoursite.com/2016/08/11/swarm集群运行springboot服务/index.html">
+<meta property="og:site_name" content="Mr.栋">
+<meta property="og:description" content="docker1.12 Swarm 模式简介1.Docker Engine 1.12 集成了Swarm集群工具.
+2.主要使用三个新的命令行工具创建一个swarm集群:
+docker swarm 开启swarm模式; 加入Swarm集群; 配置集群参数
+docker node 查询集群节点信息; 提升/移除一个管理节点; 管理swarm节点主机
+docker service 创建管理 service">
+<meta property="og:updated_time" content="2016-08-11T09:13:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="swarm集群运行springboot服务">
+<meta name="twitter:description" content="docker1.12 Swarm 模式简介1.Docker Engine 1.12 集成了Swarm集群工具.
+2.主要使用三个新的命令行工具创建一个swarm集群:
+docker swarm 开启swarm模式; 加入Swarm集群; 配置集群参数
+docker node 查询集群节点信息; 提升/移除一个管理节点; 管理swarm节点主机
+docker service 创建管理 service">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/08/11/swarm集群运行springboot服务/"/>
+
+
+
+
+
+  <title>swarm集群运行springboot服务 | Mr.栋</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mr.栋</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/11/swarm集群运行springboot服务/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zhang dong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.栋">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">swarm集群运行springboot服务</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-11T17:11:34+08:00">
+                2016-08-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="docker1-12-Swarm-模式简介"><a href="#docker1-12-Swarm-模式简介" class="headerlink" title="docker1.12 Swarm 模式简介"></a>docker1.12 Swarm 模式简介</h3><p>1.Docker Engine 1.12 集成了Swarm集群工具.</p>
+<p>2.主要使用三个新的命令行工具创建一个swarm集群:</p>
+<p>docker swarm 开启swarm模式; 加入Swarm集群; 配置集群参数</p>
+<p>docker node 查询集群节点信息; 提升/移除一个管理节点; 管理swarm节点主机</p>
+<p>docker service 创建管理 service</p>
+<h3 id="创建swarm集群"><a href="#创建swarm集群" class="headerlink" title="创建swarm集群"></a>创建swarm集群</h3><h4 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h4><p>两台centOS7(manager:10.10.135.154、worker:10.10.56.134)</p>
+<p>安装docker1.12版本，具体操作参照官网：<a href="https://docs.docker.com/engine/installation/linux/centos/" target="_blank" rel="external">https://docs.docker.com/engine/installation/linux/centos/</a></p>
+<h4 id="创建swarm"><a href="#创建swarm" class="headerlink" title="创建swarm"></a>创建swarm</h4><p>manager节点初始化，为了高可用初始化后可以join多个manager节点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@10-10-135-154 ~]# docker swarm init</span><br><span class="line">Swarm initialized: current node (258hygzd1lq4f4wup8vfbbx3k) is now a manager.</span><br><span class="line"></span><br><span class="line">To add a worker to this swarm, run the following command:</span><br><span class="line">    docker swarm join \</span><br><span class="line">    --token SWMTKN-1-28fiiskwvdaufiyx7tew8xo6fdqrvmd6ywmj3ylruxkwbhp2xn-98apqmndaixzr29gyc7y308ro \</span><br><span class="line">    10.10.135.154:2377</span><br><span class="line"></span><br><span class="line">To add a manager to this swarm, run the following command:</span><br><span class="line">    docker swarm join \</span><br><span class="line">    --token SWMTKN-1-28fiiskwvdaufiyx7tew8xo6fdqrvmd6ywmj3ylruxkwbhp2xn-awpm6ih1usvni2ul9nbbj7pnu \</span><br><span class="line">    10.10.135.154:2377</span><br></pre></td></tr></table></figure>
+<p>worker节点：加入到swarm</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@10-10-56-134 ~]# docker swarm join \</span><br><span class="line">&gt;     --token SWMTKN-1-28fiiskwvdaufiyx7tew8xo6fdqrvmd6ywmj3ylruxkwbhp2xn-98apqmndaixzr29gyc7y308ro \</span><br><span class="line">&gt;     10.10.135.154:2377</span><br><span class="line">This node joined a swarm as a worker.</span><br></pre></td></tr></table></figure>
+<p>manager节点查看集群各个节点状态：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@10-10-135-154 ~]# docker node ls</span><br><span class="line">ID                           HOSTNAME       STATUS  AVAILABILITY  MANAGER STATUS</span><br><span class="line">08cymrzez1aqnb2t3n5wpkxai    10-10-56-134   Ready   Active</span><br><span class="line">258hygzd1lq4f4wup8vfbbx3k *  10-10-135-154  Ready   Active        Leader</span><br></pre></td></tr></table></figure>
+<h4 id="创建service"><a href="#创建service" class="headerlink" title="创建service"></a>创建service</h4><p>创建管理service，相当于单机docker run</p>
+<p>metebee/swarmdemo:0.0.1 是一个springboot搭建的rest服务</p>
+<p>启动5个swarmdemo实例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@10-10-135-154 ~]# docker service create --name hello --publish 8080:8080 --replicas 5 metebee/swarmdemo:0.0.1 java -jar /usr/down/swarmtest-0.0.1-SNAPSHOT.jar</span><br><span class="line">eul4ioby3d9ajmist4oiq8oe4</span><br></pre></td></tr></table></figure>
+<p>查看启动服务状态</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@10-10-135-154 ~]# docker service ls</span><br><span class="line">ID            NAME   REPLICAS  IMAGE                    COMMAND</span><br><span class="line">eul4ioby3d9a  hello  5/5       metebee/swarmdemo:0.0.1  java -jar /usr/down/swarmtest-0.0.1-SNAPSHOT.jar</span><br></pre></td></tr></table></figure>
+<p>查看各个实例状态</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@10-10-135-154 ~]# docker service ps hello</span><br><span class="line">ID                         NAME     IMAGE                    NODE           DESIRED STATE  CURRENT STATE          ERROR</span><br><span class="line">bhmqg92wm28s6pima8q4z7nqb  hello.1  metebee/swarmdemo:0.0.1  10-10-135-154  Running        Running 7 minutes ago</span><br><span class="line">dy5a3djz6wh8e1qn5wsrc0e1p  hello.2  metebee/swarmdemo:0.0.1  10-10-56-134   Running        Running 7 minutes ago</span><br><span class="line">61001wv8sny3ge8xdcvzdpdqh  hello.3  metebee/swarmdemo:0.0.1  10-10-56-134   Running        Running 7 minutes ago</span><br><span class="line">2kyr8n3hx0iicg4f0ytjfw5uy  hello.4  metebee/swarmdemo:0.0.1  10-10-135-154  Running        Running 7 minutes ago</span><br><span class="line">25a70511y7g36wtr1bu4d7285  hello.5  metebee/swarmdemo:0.0.1  10-10-135-154  Running        Running 7 minutes ago</span><br></pre></td></tr></table></figure>
+<p>可以看到worker（10-10-56-134）上启动了两个实例；manager（10-10-135-154）上启动了3个实例</p>
+<p>实时查看各个实例状态：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">watch docker service ps hello</span><br></pre></td></tr></table></figure>
+<p>注意DESIRED STATE列, 一个service副本的创建过程,会经历以下几个状态:</p>
+<p>—accepted 任务已经被分配到某一个节点执行</p>
+<p>—preparing 准备资源, 现在来说一般是从网络拉取image</p>
+<p>—running 副本运行成功</p>
+<p>—shutdown 呃, 报错,被停止了…</p>
+<p>此时如果杀死一个实例,swarm会自动重启该实例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stop &lt;ID&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><p>在master执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://127.0.0.1:8080/resttest/helloword</span><br></pre></td></tr></table></figure>
+<p>控制台响应：helloworld</p>
+<p>此时请求会随机转发到这5个springboot实例上。</p>
+<h3 id="session问题"><a href="#session问题" class="headerlink" title="session问题"></a>session问题</h3><p>由于swarm这种转发不像nginx的ip_hash模式，所以可以选择使用redis集中管理session的方式解决session问题。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/09/转-Java服务CPU飙到99-问题排查/" rel="next" title="转:Java服务CPU飙到99%问题排查">
+                <i class="fa fa-chevron-left"></i> 转:Java服务CPU飙到99%问题排查
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/05/网络协议/" rel="prev" title="网络协议">
+                网络协议 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="zhang dong" />
+          <p class="site-author-name" itemprop="name">zhang dong</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#docker1-12-Swarm-模式简介"><span class="nav-number">1.</span> <span class="nav-text">docker1.12 Swarm 模式简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建swarm集群"><span class="nav-number">2.</span> <span class="nav-text">创建swarm集群</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#准备"><span class="nav-number">2.1.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建swarm"><span class="nav-number">2.2.</span> <span class="nav-text">创建swarm</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建service"><span class="nav-number">2.3.</span> <span class="nav-text">创建service</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试"><span class="nav-number">2.4.</span> <span class="nav-text">测试</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#session问题"><span class="nav-number">3.</span> <span class="nav-text">session问题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhang dong</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

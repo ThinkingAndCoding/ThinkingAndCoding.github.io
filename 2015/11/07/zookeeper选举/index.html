@@ -1,0 +1,760 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="zookeeper选举," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="如何在zookeeper集群中选举出一个leader,zookeeper使用了三种算法,具体使用哪种算法,在配置文件中是可以配置的,对应的配置项是”electionAlg”,其中1对应的是LeaderElection算法,2对应的是AuthFastLeaderElection算法,3对应的是FastLeaderElection算法.默认使用FastLeaderElection算法.其他两种算法我没">
+<meta property="og:type" content="article">
+<meta property="og:title" content="zookeeper选举">
+<meta property="og:url" content="http://yoursite.com/2015/11/07/zookeeper选举/index.html">
+<meta property="og:site_name" content="Mr.栋">
+<meta property="og:description" content="如何在zookeeper集群中选举出一个leader,zookeeper使用了三种算法,具体使用哪种算法,在配置文件中是可以配置的,对应的配置项是”electionAlg”,其中1对应的是LeaderElection算法,2对应的是AuthFastLeaderElection算法,3对应的是FastLeaderElection算法.默认使用FastLeaderElection算法.其他两种算法我没">
+<meta property="og:updated_time" content="2016-06-07T14:18:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="zookeeper选举">
+<meta name="twitter:description" content="如何在zookeeper集群中选举出一个leader,zookeeper使用了三种算法,具体使用哪种算法,在配置文件中是可以配置的,对应的配置项是”electionAlg”,其中1对应的是LeaderElection算法,2对应的是AuthFastLeaderElection算法,3对应的是FastLeaderElection算法.默认使用FastLeaderElection算法.其他两种算法我没">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/11/07/zookeeper选举/"/>
+
+
+
+
+
+  <title>zookeeper选举 | Mr.栋</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mr.栋</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/11/07/zookeeper选举/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zhang dong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.栋">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">zookeeper选举</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-11-07T12:08:17+08:00">
+                2015-11-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>如何在zookeeper集群中选举出一个leader,zookeeper使用了三种算法,具体使用哪种算法,在配置文件中是可以配置的,对应的配置项是”electionAlg”,其中1对应的是LeaderElection算法,2对应的是AuthFastLeaderElection算法,3对应的是FastLeaderElection算法.默认使用FastLeaderElection算法.其他两种算法我没有研究过,就不多说了.</p>
+<p>要理解这个算法,最好需要一些paxos算法的理论基础.<br><a id="more"></a><br>1) 数据恢复阶段<br>首先,每个在zookeeper服务器先读取当前保存在磁盘的数据,zookeeper中的每份数据,都有一个对应的id值,这个值是依次递增的,换言之,越新的数据,对应的ID值就越大.</p>
+<p>2) 首次发送自己的投票值<br>在读取数据完毕之后,每个zookeeper服务器发送自己选举的leader,这个协议中包含了以下几部分的数据:<br>1)所选举leader的id(就是配置文件中写好的每个服务器的id) ,在初始阶段,每台服务器的这个值都是自己服务器的id,也就是它们都选举自己为leader.<br>2) 服务器最大数据的id,这个值大的服务器,说明存放了更新的数据.<br>3)逻辑时钟的值,这个值从0开始递增,每次选举对应一个值,也就是说:如果在同一次选举中,那么这个值应该是一致的 2)逻辑时钟值越大,说明这一次选举leader的进程更新.<br>4) 本机在当前选举过程中的状态,有以下几种:LOOKING,FOLLOWING,OBSERVING,LEADING,顾名思义不必解释了吧.</p>
+<p>每台服务器将自己服务器的以上数据发送到集群中的其他服务器之后,同样的也需要接收来自其他服务器的数据,它将做以下的处理:</p>
+<p>1) 如果所接收数据服务器的状态还是在选举阶段(LOOKING 状态),那么首先判断逻辑时钟值,又分为以下三种情况:<br>a) 如果发送过来的逻辑时钟大于目前的逻辑时钟,那么说明这是更新的一次选举,此时需要更新一下本机的逻辑时钟值,同时将之前收集到的来自其他服务器的选举清空,因为这些数据已经不再有效了.然后判断是否需要更新当前自己的选举情况.在这里是根据选举leader id,保存的最大数据id来进行判断的,这两种数据之间对这个选举结果的影响的权重关系是:首先看数据id,数据id大者胜出;其次再判断leader id,leader id大者胜出.然后再将自身最新的选举结果(也就是上面提到的三种数据广播给其他服务器).代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">if (n.epoch &gt; logicalclock) &#123;  </span><br><span class="line">logicalclock = n.epoch;  </span><br><span class="line">recvset.clear();  </span><br><span class="line">if(totalOrderPredicate(n.leader, n.zxid,getInitId(), getInitLastLoggedZxid()))  </span><br><span class="line">   updateProposal(n.leader, n.zxid);  </span><br><span class="line">else  </span><br><span class="line">updateProposal(getInitId(),getInitLastLoggedZxid());  </span><br><span class="line">  </span><br><span class="line">sendNotifications();</span><br></pre></td></tr></table></figure>
+<p>其中的totalOrderPredicate函数就是根据发送过来的封包中的leader id,数据id来与本机保存的相应数据进行判断的函数,返回true说明需要更新数据,于是调用updateProposal函数更新数据<br>b) 发送过来数据的逻辑时钟小于本机的逻辑时钟<br>说明对方在一个相对较早的选举进程中,这里只需要将本机的数据发送过去就是了</p>
+<p>c) 两边的逻辑时钟相同,此时也只是调用totalOrderPredicate函数判断是否需要更新本机的数据,如果更新了再将自己最新的选举结果广播出去就是了.</p>
+<p>实际上，在处理选票之前，还有一个预处理的动作，它发生在刚刚接收到关于vote的message的时候，具体过程如下：</p>
+<p>1.判断message的来源是不是observer，如果是，则告诉该observer我当前认为的Leader的信息，否则进入2<br>2.判断message是不是vote信息，是则进入3<br>3.根据message创建一张vote<br>4.如果当前server处理LOOKING状态，将vote放入自己的投票箱，而且如果vote源server处于LOOKING状态同时vote源server的选举时旧的，则当前server通知它新的一轮投票；<br>5如果当前server不处于LOOKING状态而vote源server处理LOOKING状态，则当前server告诉它当前的Leader信息。</p>
+<p>三种情况的处理完毕之后,再处理两种情况:</p>
+<p>1)服务器判断是不是已经收集到了所有服务器的选举状态,如果是那么根据选举结果设置自己的角色(FOLLOWING还是LEADER),然后退出选举过程就是了.</p>
+<p>2)即使没有收集到所有服务器的选举状态,也可以判断一下根据以上过程之后最新的选举leader是不是得到了超过半数以上服务器的支持,如果是,那么尝试在200ms内接收一下数据,如果没有新的数据到来,说明大家都已经默认了这个结果,同样也设置角色退出选举过程.<br>代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">if(self.getVotingView().containsKey(n.sid))&#123;  </span><br><span class="line">recvset.put(n.sid, new Vote(n.leader, n.zxid, n.epoch));  </span><br><span class="line">  </span><br><span class="line">//If have received from all nodes, then terminate  </span><br><span class="line">if((self.getVotingView().size() == recvset.size()) &amp;&amp; (self.getQuorumVerifier().getWeight(proposedLeader) != 0))&#123;  </span><br><span class="line">self.setPeerState((proposedLeader == self.getId()) ? ServerState.LEADING: learningState());  </span><br><span class="line">leaveInstance();  </span><br><span class="line">return new Vote(proposedLeader, proposedZxid);  </span><br><span class="line">  </span><br><span class="line">&#125; else if (termPredicate(recvset,new Vote(proposedLeader, proposedZxid,logicalclock))) &#123;  </span><br><span class="line">  </span><br><span class="line">// Verify if there is any change in the proposed leader  </span><br><span class="line">while((n = recvqueue.poll(finalizeWait,TimeUnit.MILLISECONDS)) != null)&#123;  </span><br><span class="line">if(totalOrderPredicate(n.leader, n.zxid,proposedLeader, proposedZxid))&#123;  </span><br><span class="line">   recvqueue.put(n);  </span><br><span class="line">   break;  </span><br><span class="line">&#125;  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line">/* </span><br><span class="line">* This predicate is true once we don&apos;t read any new </span><br><span class="line">* relevant message from the reception queue </span><br><span class="line">*/  </span><br><span class="line">if (n == null) &#123;  </span><br><span class="line">self.setPeerState((proposedLeader == self.getId()) ? ServerState.LEADING: learningState());  </span><br><span class="line">if(LOG.isDebugEnabled())&#123;  </span><br><span class="line">LOG.debug(&quot;About to leave FLE instance: Leader= &quot; + proposedLeader + &quot;, Zxid = &quot; + proposedZxid + &quot;, My id = &quot; + self.getId() + &quot;, My state = &quot; + self.getPeerState());  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line">leaveInstance();  </span><br><span class="line">return new Vote(proposedLeader,proposedZxid);  </span><br><span class="line">&#125;  </span><br><span class="line">&#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2) 如果所接收服务器不在选举状态,也就是在FOLLOWING或者LEADING状态<br>做以下两个判断:<br>a) 如果逻辑时钟相同,将该数据保存到recvset,如果所接收服务器宣称自己是leader,那么将判断是不是有半数以上的服务器选举它,如果是则设置选举状态退出选举过程<br>b) 否则这是一条与当前逻辑时钟不符合的消息,那么说明在另一个选举过程中已经有了选举结果,于是将该选举结果加入到outofelection集合中,再根据outofelection来判断是否可以结束选举,如果可以也是保存逻辑时钟,设置选举状态,退出选举过程.<br>代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">if(n.epoch == logicalclock)&#123;  </span><br><span class="line">recvset.put(n.sid, new Vote(n.leader, n.zxid, n.epoch));  </span><br><span class="line">if((n.state == ServerState.LEADING) || (termPredicate(recvset, new Vote(n.leader,n.zxid, n.epoch, n.state))&amp;&amp; checkLeader(outofelection, n.leader, n.epoch)) )&#123;  </span><br><span class="line">self.setPeerState((n.leader == self.getId()) ?ServerState.LEADING: learningState());  </span><br><span class="line">leaveInstance();  </span><br><span class="line">return new Vote(n.leader, n.zxid);  </span><br><span class="line">&#125;  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line">outofelection.put(n.sid, new Vote(n.leader, n.zxid, n.epoch, n.state));  </span><br><span class="line">  </span><br><span class="line">if(termPredicate(outofelection, new Vote(n.leader,n.zxid, n.epoch, n.state))&amp;&amp; checkLeader(outofelection, n.leader, n.epoch)) &#123;  </span><br><span class="line">   synchronized(this)&#123;  </span><br><span class="line">      logicalclock = n.epoch;  </span><br><span class="line">      self.setPeerState((n.leader == self.getId()) ? ServerState.LEADING: learningState());  </span><br><span class="line">   &#125;  </span><br><span class="line">   leaveInstance();  </span><br><span class="line">   return new Vote(n.leader, n.zxid);  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line">break;  </span><br><span class="line">&#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以一个简单的例子来说明整个选举的过程.<br>假设有五台服务器组成的zookeeper集群,它们的id从1-5,同时它们都是最新启动的,也就是没有历史数据,在存放数据量这一点上,都是一样的.假设这些服务器依序启动,来看看会发生什么.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1) 服务器1启动,此时只有它一台服务器启动了,它发出去的报没有任何响应,所以它的选举状态一直是LOOKING状态  </span><br><span class="line">2) 服务器2启动,它与最开始启动的服务器1进行通信,互相交换自己的选举结果,由于两者都没有历史数据,所以id值较大的服务器2胜出,但是由于没有达到超过半数以上的服务器都同意选举它(这个例子中的半数以上是3),所以服务器1,2还是继续保持LOOKING状态.  </span><br><span class="line">3) 服务器3启动,根据前面的理论分析,服务器3成为服务器1,2,3中的老大,而与上面不同的是,此时有三台服务器选举了它,所以它成为了这次选举的leader.  </span><br><span class="line">4) 服务器4启动,根据前面的分析,理论上服务器4应该是服务器1,2,3,4中最大的,但是由于前面已经有半数以上的服务器选举了服务器3,所以它只能接收当小弟的命了.  </span><br><span class="line">5) 服务器5启动,同4一样,当小弟.</span><br></pre></td></tr></table></figure>
+<p>送过来的逻辑时钟大于目前的逻辑时钟,那么说明这是更新的一次选举,此时需要更新一下本机的逻辑时钟值,同时将之前收集到的来自其他服务器的选举清空,因为这些数据已经不再有效了.然后判断是否需要更新当前自己的选举情况.在这里是根据选举leader id,保存的最大数据id来进行判断的,这两种数据之间对这个选举结果的影响的权重关系是:首先看数据id,数据id大者胜出;其次再判断leader id,leader id大者胜出.然后再将自身最新的选举结果(也就是上面提到的三种数据广播给其他服务器).代码如下:</p>
+<h2 id="leader选举"><a href="#leader选举" class="headerlink" title="leader选举"></a>leader选举</h2><p>在分布式计算中， leader election是很重要的一个功能， 这个选举过程是这样子的： 指派一个进程作为组织者，将任务分发给各节点。 在任务开始前， 哪个节点都不知道谁是leader或者coordinator. 当选举算法开始执行后， 每个节点最终会得到一个唯一的节点作为任务leader.<br>除此之外， 选举还经常会发生在leader意外宕机的情况下，新的leader要被选举出来。</p>
+<p>Curator 有两种选举recipe， 你可以根据你的需求选择合适的。</p>
+<h3 id="Leader-latch"><a href="#Leader-latch" class="headerlink" title="Leader latch"></a>Leader latch</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">public LeaderLatch(CuratorFramework client, String latchPath)</span><br><span class="line">public LeaderLatch(CuratorFramework client, String latchPath,  String id)</span><br></pre></td></tr></table></figure>
+<p>必须启动LeaderLatch: leaderLatch.start();</p>
+<p>一旦启动， LeaderLatch会和其它使用相同latch path的其它LeaderLatch交涉，然后随机的选择其中一个作为leader。 你可以随时查看一个给定的实例是否是leader:</p>
+<p>public boolean hasLeadership()</p>
+<p>类似JDK的CountDownLatch， LeaderLatch在请求成为leadership时有block方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public void await()</span><br><span class="line">          throws InterruptedException,</span><br><span class="line">                 EOFException</span><br><span class="line">Causes the current thread to wait until this instance acquires leadership</span><br><span class="line">unless the thread is interrupted or closed.</span><br><span class="line">public boolean await(long timeout,</span><br><span class="line">                     TimeUnit unit)</span><br><span class="line">             throws InterruptedException</span><br><span class="line">```             </span><br><span class="line"></span><br><span class="line">一旦不使用LeaderLatch了，必须调用close方法。 如果它是leader,会释放leadership， 其它的参与者将会选举一个leader。</span><br><span class="line"></span><br><span class="line">异常处理</span><br><span class="line">LeaderLatch实例可以增加ConnectionStateListener来监听网络连接问题。 当 SUSPENDED 或 LOST 时, leader不再认为自己还是leader.当LOST 连接重连后 RECONNECTED,LeaderLatch会删除先前的ZNode然后重新创建一个.</span><br><span class="line">LeaderLatch用户必须考虑导致leadershi丢失的连接问题。 强烈推荐你使用ConnectionStateListener。</span><br><span class="line"></span><br><span class="line">下面看例子：</span><br></pre></td></tr></table></figure>
+<p>package com.colobu.zkrecipe.leaderelection;<br>import java.io.BufferedReader;<br>import java.io.IOException;<br>import java.io.InputStreamReader;<br>import java.util.List;<br>import java.util.concurrent.TimeUnit;<br>import org.apache.curator.framework.CuratorFramework;<br>import org.apache.curator.framework.CuratorFrameworkFactory;<br>import org.apache.curator.framework.recipes.leader.LeaderLatch;<br>import org.apache.curator.retry.ExponentialBackoffRetry;<br>import org.apache.curator.test.TestingServer;<br>import org.apache.curator.utils.CloseableUtils;<br>import com.google.common.collect.Lists;<br>public class LeaderLatchExample {<br>    private static final int CLIENT_QTY = 10;<br>    private static final String PATH = “/examples/leader”;<br>    public static void main(String[] args) throws Exception {<br>        List<curatorframework> clients = Lists.newArrayList();<br>        List<leaderlatch> examples = Lists.newArrayList();<br>        TestingServer server = new TestingServer();<br>        try {<br>            for (int i = 0; i &lt; CLIENT_QTY; ++i) {<br>                CuratorFramework client = CuratorFrameworkFactory.newClient(server.getConnectString(), new ExponentialBackoffRetry(1000, 3));<br>                clients.add(client);<br>                LeaderLatch example = new LeaderLatch(client, PATH, “Client #” + i);<br>                examples.add(example);<br>                client.start();<br>                example.start();<br>            }<br>            Thread.sleep(20000);<br>            LeaderLatch currentLeader = null;<br>            for (int i = 0; i &lt; CLIENT_QTY; ++i) {<br>                LeaderLatch example = examples.get(i);<br>                if (example.hasLeadership())<br>                    currentLeader = example;<br>            }<br>            System.out.println(“current leader is “ + currentLeader.getId());<br>            System.out.println(“release the leader “ + currentLeader.getId());<br>            currentLeader.close();<br>            examples.get(0).await(2, TimeUnit.SECONDS);<br>            System.out.println(“Client #0 maybe is elected as the leader or not although it want to be”);<br>            System.out.println(“the new leader is “ + examples.get(0).getLeader().getId());</leaderlatch></curatorframework></p>
+<pre><code>        System.out.println(&quot;Press enter/return to quit\n&quot;);
+        new BufferedReader(new InputStreamReader(System.in)).readLine();
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        System.out.println(&quot;Shutting down...&quot;);
+        for (LeaderLatch exampleClient : examples) {
+            CloseableUtils.closeQuietly(exampleClient);
+        }
+        for (CuratorFramework client : clients) {
+            CloseableUtils.closeQuietly(client);
+        }
+        CloseableUtils.closeQuietly(server);
+    }
+}
+</code></pre><p>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">首先我们创建了10个LeaderLatch，启动后它们中的一个会被选举为leader。 因为选举会花费一些时间，start后并不能马上就得到leader。</span><br><span class="line">通过hasLeadership查看自己是否是leader， 如果是的话返回true。</span><br><span class="line">可以通过.getLeader().getId()可以得到当前的leader的ID。</span><br><span class="line">只能通过close释放当前的领导权。</span><br><span class="line">await是一个阻塞方法， 尝试获取leader地位，但是未必能上位。</span><br><span class="line"></span><br><span class="line">Leader Election</span><br><span class="line"></span><br><span class="line">Curator还提供了另外一种选举方法。</span><br><span class="line">注意涉及以下四个类：</span><br><span class="line"></span><br><span class="line">LeaderSelector</span><br><span class="line">LeaderSelectorListener</span><br><span class="line">LeaderSelectorListenerAdapter</span><br><span class="line">CancelLeadershipException</span><br><span class="line">重要的是LeaderSelector类，它的构造函数为：</span><br></pre></td></tr></table></figure>
+<p>public LeaderSelector(CuratorFramework client, String mutexPath,LeaderSelectorListener listener)<br>public LeaderSelector(CuratorFramework client, String mutexPath, ThreadFactory threadFactory, Executor executor, LeaderSelectorListener listener)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">类似LeaderLatch,必须start: leaderSelector.start();</span><br><span class="line"></span><br><span class="line">一旦启动，当实例取得领导权时你的listener的takeLeadership()方法被调用. 而takeLeadership()方法只有领导权被释放时才返回。</span><br><span class="line">当你不再使用LeaderSelector实例时，应该调用它的close方法。</span><br><span class="line"></span><br><span class="line">异常处理</span><br><span class="line">LeaderSelectorListener类继承ConnectionStateListener.LeaderSelector必须小心连接状态的改变. 如果实例成为leader, 它应该相应SUSPENDED 或 LOST. 当 SUSPENDED 状态出现时， 实例必须假定在重新连接成功之前它可能不再是leader了。 如果LOST状态出现， 实例不再是leader， takeLeadership方法返回.</span><br><span class="line"></span><br><span class="line">重要: 推荐处理方式是当收到SUSPENDED 或 LOST时抛出CancelLeadershipException异常. 这会导致LeaderSelector实例中断并取消执行takeLeadership方法的异常. 这非常重要， 你必须考虑扩展LeaderSelectorListenerAdapter. LeaderSelectorListenerAdapter提供了推荐的处理逻辑。</span><br><span class="line"></span><br><span class="line">这个例子摘自官方。</span><br><span class="line">首先创建一个ExampleClient类， 它继承LeaderSelectorListenerAdapter， 它实现了takeLeadership方法：</span><br></pre></td></tr></table></figure></p>
+<p>package com.colobu.zkrecipe.leaderelection;<br>import org.apache.curator.framework.CuratorFramework;<br>import org.apache.curator.framework.recipes.leader.LeaderSelectorListenerAdapter;<br>import org.apache.curator.framework.recipes.leader.LeaderSelector;<br>import java.io.Closeable;<br>import java.io.IOException;<br>import java.util.concurrent.TimeUnit;<br>import java.util.concurrent.atomic.AtomicInteger;<br>public class ExampleClient extends LeaderSelectorListenerAdapter implements Closeable {<br>    private final String name;<br>    private final LeaderSelector leaderSelector;<br>    private final AtomicInteger leaderCount = new AtomicInteger();<br>    public ExampleClient(CuratorFramework client, String path, String name) {<br>        this.name = name;<br>        leaderSelector = new LeaderSelector(client, path, this);<br>        leaderSelector.autoRequeue();<br>    }<br>    public void start() throws IOException {<br>        leaderSelector.start();<br>    }<br>    @Override<br>    public void close() throws IOException {<br>        leaderSelector.close();<br>    }</p>
+<pre><code>@Override
+public void takeLeadership(CuratorFramework client) throws Exception {
+    final int waitSeconds = (int) (5 * Math.random()) + 1;
+    System.out.println(name + &quot; is now the leader. Waiting &quot; + waitSeconds + &quot; seconds...&quot;);
+    System.out.println(name + &quot; has been leader &quot; + leaderCount.getAndIncrement() + &quot; time(s) before.&quot;);
+    try {
+        Thread.sleep(TimeUnit.SECONDS.toMillis(waitSeconds));
+    } catch (InterruptedException e) {
+        System.err.println(name + &quot; was interrupted.&quot;);
+        Thread.currentThread().interrupt();
+    } finally {
+        System.out.println(name + &quot; relinquishing leadership.\n&quot;);
+    }
+}
+</code></pre><p>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">你可以在takeLeadership进行任务的分配等等，并且不要返回，如果你想要要此实例一直是leader的话可以加一个死循环。</span><br><span class="line">leaderSelector.autoRequeue();保证在此实例释放领导权之后还可能获得领导权。</span><br><span class="line">在这里我们使用AtomicInteger来记录此client获得领导权的次数， 它是&quot;fair&quot;， 每个client有平等的机会获得领导权。</span><br><span class="line"></span><br><span class="line">测试代码:</span><br></pre></td></tr></table></figure>
+<p>package com.colobu.zkrecipe.leaderelection;<br>import java.io.BufferedReader;<br>import java.io.InputStreamReader;<br>import java.util.List;<br>import org.apache.curator.framework.CuratorFramework;<br>import org.apache.curator.framework.CuratorFrameworkFactory;<br>import org.apache.curator.framework.recipes.leader.LeaderSelector;<br>import org.apache.curator.retry.ExponentialBackoffRetry;<br>import org.apache.curator.test.TestingServer;<br>import org.apache.curator.utils.CloseableUtils;<br>import com.google.common.collect.Lists;<br>public class LeaderSelectorExample {<br>    private static final int CLIENT_QTY = 10;<br>    private static final String PATH = “/examples/leader”;<br>    public static void main(String[] args) throws Exception {<br>        List<curatorframework> clients = Lists.newArrayList();<br>        List<exampleclient> examples = Lists.newArrayList();<br>        TestingServer server = new TestingServer();<br>        try {<br>            for (int i = 0; i &lt; CLIENT_QTY; ++i) {<br>                CuratorFramework client = CuratorFrameworkFactory.newClient(server.getConnectString(), new ExponentialBackoffRetry(1000, 3));<br>                clients.add(client);<br>                ExampleClient example = new ExampleClient(client, PATH, “Client #” + i);<br>                examples.add(example);<br>                client.start();<br>                example.start();<br>            }</exampleclient></curatorframework></p>
+<pre><code>        System.out.println(&quot;Press enter/return to quit\n&quot;);
+        new BufferedReader(new InputStreamReader(System.in)).readLine();
+    } finally {
+        System.out.println(&quot;Shutting down...&quot;);
+        for (ExampleClient exampleClient : examples) {
+            CloseableUtils.closeQuietly(exampleClient);
+        }
+        for (CuratorFramework client : clients) {
+            CloseableUtils.closeQuietly(client);
+        }
+        CloseableUtils.closeQuietly(server);
+    }
+}
+</code></pre><p>}</p>
+<p>```</p>
+<p>与LeaderLatch， 通过LeaderSelectorListener可以对领导权进行控制， 在适当的时候释放领导权，这样每个节点都有可能获得领导权。 而LeaderLatch一根筋到死， 除非调用close方法，否则它不会释放领导权。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/zookeeper选举/" rel="tag"># zookeeper选举</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/09/07/第一个/" rel="next" title="flume-kafka-storm-redis集群搭建">
+                <i class="fa fa-chevron-left"></i> flume-kafka-storm-redis集群搭建
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/07/redis/" rel="prev" title="redis">
+                redis <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="zhang dong" />
+          <p class="site-author-name" itemprop="name">zhang dong</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#leader选举"><span class="nav-number">1.</span> <span class="nav-text">leader选举</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Leader-latch"><span class="nav-number">1.1.</span> <span class="nav-text">Leader latch</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhang dong</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

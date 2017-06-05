@@ -1,0 +1,716 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="https,http,tcp,socket," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="网络协议TCP/IP是传输层协议,主要解决数据在网络中的传输.Http是应用层的协议,用于如何封装数据.传输数据的时候,只使用TCP/IP协议(传输层).如果没有应用层来识别数据内容,传输后的协议都是无用的.       应用层协议很多,FTP,HTTP,TELNET等,可以自己定义应用层协议.WEB使用HTTP作传输层协议.以封装HTTP文本信息,然后使用TCP/IP做传输层协议,将数据发送到网">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络协议">
+<meta property="og:url" content="http://yoursite.com/2016/12/05/网络协议/index.html">
+<meta property="og:site_name" content="Mr.栋">
+<meta property="og:description" content="网络协议TCP/IP是传输层协议,主要解决数据在网络中的传输.Http是应用层的协议,用于如何封装数据.传输数据的时候,只使用TCP/IP协议(传输层).如果没有应用层来识别数据内容,传输后的协议都是无用的.       应用层协议很多,FTP,HTTP,TELNET等,可以自己定义应用层协议.WEB使用HTTP作传输层协议.以封装HTTP文本信息,然后使用TCP/IP做传输层协议,将数据发送到网">
+<meta property="og:image" content="http://yoursite.com/img/WechatIMG180.jpg">
+<meta property="og:updated_time" content="2016-12-05T06:44:12.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网络协议">
+<meta name="twitter:description" content="网络协议TCP/IP是传输层协议,主要解决数据在网络中的传输.Http是应用层的协议,用于如何封装数据.传输数据的时候,只使用TCP/IP协议(传输层).如果没有应用层来识别数据内容,传输后的协议都是无用的.       应用层协议很多,FTP,HTTP,TELNET等,可以自己定义应用层协议.WEB使用HTTP作传输层协议.以封装HTTP文本信息,然后使用TCP/IP做传输层协议,将数据发送到网">
+<meta name="twitter:image" content="http://yoursite.com/img/WechatIMG180.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/12/05/网络协议/"/>
+
+
+
+
+
+  <title>网络协议 | Mr.栋</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mr.栋</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/05/网络协议/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zhang dong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.栋">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">网络协议</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-05T14:29:08+08:00">
+                2016-12-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="网络协议"><a href="#网络协议" class="headerlink" title="网络协议"></a>网络协议</h2><p>TCP/IP是传输层协议,主要解决数据在网络中的传输.Http是应用层的协议,用于如何封装数据.传输数据的时候,只使用TCP/IP协议(传输层).如果没有应用层来识别数据内容,传输后的协议都是无用的.<br>       应用层协议很多,FTP,HTTP,TELNET等,可以自己定义应用层协议.WEB使用HTTP作传输层协议.以封装HTTP文本信息,然后使用TCP/IP做传输层协议,将数据发送到网络上.</p>
+<p>Socket是对TCP/IP协议的封装,Socket只是个接口,不是协议,通过Socket,我们才能使用TCP/IP协议.<br>当然,除了TCP,也可以使用UDP协议来传递数据.</p>
+<p>三 HTTP和Socket连接区别</p>
+<p>1 TCP连接<br>       要想明白Socket,必须要理解TCP连接.<br>        建立TCP连接的”三次握手”:<br>        第一次:客户端向服务器发送SYN包(syn=j),同时自己处于SYN_SEND状态.<br>        第二次:服务器端收到SYN包后,必须确认客户的SYN(syn=j+1),同时也发送一个SYN包(syn=k),即SYN+ACK包,此时服务器进入SYN_RECV状态.<br>        第三次:客户端收到服务器发来的SYN+ACK包,就向服务器发送SYN(syn=k+1),发送完毕后,服务器和客户端都进入ESTABLISHED状态.完成三次握手.<br>握手过程中,并不传输数据.在握手后,服务器与客户端才开始传输数据,理想状态下,TCP连接一旦建立,在通讯双方中的任何一方主动断开连接之前,TCP连接会一直保持下去.</p>
+<p>2 HTTP连接<br>       HTTP最显著的特点:客户端发送请求都需要服务器端回送响应.请求结束后,主动释放链接.HTTP是一种短连接.通常的做法是,不需要任何数据,也要保持每隔一段时间向服务器发送”保持连接”的请求.这样可以保证客户端在服务器端是”上线”状态.</p>
+<a id="more"></a>
+<p>3 socket原理<br>       Socket连接,至少需要一对套接字,分为clientSocket,serverSocket.连接分为3个步骤:<br>服务器监听:服务器并不定位具体客户端的套接字,而是时刻处于监听状态.<br>客户端请求:客户端的套接字要描述它要连接的服务器的套接字.提供地址和端口号,然后向服务器套接字提出连接请求.<br>连接确认:当服务器套接字收到客户端套接字发来的请求后,就响应客户端套接字的请求,并建立一个新的线程,把服务器端的套接字的描述发给客户端,一旦客户端确认了此描述,就正式建立连接.而服务器套接字继续处于监听状态,继续接收其他客户端套接字的连接请求.</p>
+<p>4 Socket连接与TCP连接<br>       创建Socket连接的时候,可以指定传输层协议.可以是TCP或者UDP,当用TCP连接,该Socket就是个TCP连接.</p>
+<p>5 Socket连接与HTTP连接<br>       通常情况下Socket连接就是TCP连接,因此Socket连接一旦建立,通讯双方开始互发数据内容,直到双方断开连接.在实际应用中,由于网络节点过多,在传输过程中,会被节点断开连接.因此要通过轮询高速网络,该节点处于活跃状态.<br>HTTP连接使用的是”请求-响应”方式,不仅在请求时建立连接,而且客户端向服务器端请求后,服务器才返回数据.</p>
+<p>很多情况下,都是需要服务器端向客户端主动推送数据,保持客户端与服务端的实时同步.若双方是Socket连接,可以由服务器直接向客户端发送数据.若双方是HTTP连接,则服务器需要等客户端发送请求后,才能将数据回传给客户端.因此,客户端定时向服务器端发送请求,不仅可以保持在线,同时也询问服务器是否有新数据,如果有就将数据传给客户端.</p>
+<p>HTTPS的工作原理</p>
+<p>HTTPS在传输数据之前需要客户端（浏览器）与服务端（网站）之间进行一次握手，在握手过程中将确立双方加密传输数据的密码信息。TLS/SSL协议不仅仅是一套加密传输的协议，更是一件经过艺术家精心设计的艺术品，TLS/SSL中使用了非对称加密，对称加密以及HASH算法。握手过程的简单描述如下：</p>
+<p>1.浏览器将自己支持的一套加密规则发送给网站。</p>
+<p>2.网站从中选出一组加密算法与HASH算法，并将自己的身份信息以证书的形式发回给浏览器。证书里面包含了网站地址，加密公钥，以及证书的颁发机构等信息。</p>
+<p>3.获得网站证书之后浏览器要做以下工作：</p>
+<p>a) 验证证书的合法性（颁发证书的机构是否合法，证书中包含的网站地址是否与正在访问的地址一致等），如果证书受信任，则浏览器栏里面会显示一个小锁头，否则会给出证书不受信的提示。</p>
+<p>b) 如果证书受信任，或者是用户接受了不受信的证书，浏览器会生成一串随机数的密码，并用证书中提供的公钥加密。</p>
+<p>c) 使用约定好的HASH计算握手消息，并使用生成的随机数对消息进行加密，最后将之前生成的所有信息发送给网站。</p>
+<p>4.网站接收浏览器发来的数据之后要做以下的操作：</p>
+<p>a) 使用自己的私钥将信息解密取出密码，使用密码解密浏览器发来的握手消息，并验证HASH是否与浏览器发来的一致。</p>
+<p>b) 使用密码加密一段握手消息，发送给浏览器。</p>
+<p>5.浏览器解密并计算握手消息的HASH，如果与服务端发来的HASH一致，此时握手过程结束，之后所有的通信数据将由之前浏览器生成的随机密码并利用对称加密算法进行加密。</p>
+<p>这里浏览器与网站互相发送加密的握手消息并验证，目的是为了保证双方都获得了一致的密码，并且可以正常的加密解密数据，为后续真正数据的传输做一次测试。另外，HTTPS一般使用的加密与HASH算法如下：</p>
+<p>非对称加密算法：RSA，DSA/DSS</p>
+<p>对称加密算法：AES，RC4，3DES</p>
+<p>HASH算法：MD5，SHA1，SHA256</p>
+<p>其中非对称加密算法用于在握手过程中加密生成的密码，对称加密算法用于对真正传输的数据进行加密，而HASH算法用于验证数据的完整性。由于浏览器生成的密码是整个数据加密的关键，因此在传输的时候使用了非对称加密算法对其加密。非对称加密算法会生成公钥和私钥，公钥只能用于加密数据，因此可以随意传输，而网站的私钥用于对数据进行解密，所以网站都会非常小心的保管自己的私钥，防止泄漏。</p>
+<p><img src="/img/WechatIMG180.jpg" alt="img"></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/https/" rel="tag"># https</a>
+          
+            <a href="/tags/http/" rel="tag"># http</a>
+          
+            <a href="/tags/tcp/" rel="tag"># tcp</a>
+          
+            <a href="/tags/socket/" rel="tag"># socket</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/11/swarm集群运行springboot服务/" rel="next" title="swarm集群运行springboot服务">
+                <i class="fa fa-chevron-left"></i> swarm集群运行springboot服务
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/09/限流策略/" rel="prev" title="限流策略">
+                限流策略 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="zhang dong" />
+          <p class="site-author-name" itemprop="name">zhang dong</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#网络协议"><span class="nav-number">1.</span> <span class="nav-text">网络协议</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhang dong</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
