@@ -101,7 +101,7 @@
 <meta property="og:site_name" content="Mr.栋">
 <meta property="og:description" content="RobotFramework使用手册简介RobotFramework是一个通用的测试自动化框架验收测试和验收测试驱动开发(ATDD)。它易于使用的表格测试数据的语法和使用关键字驱动的测试方法。它的测试功能可以使用测试库与Python或Java实现,用户可以创建新的更高层次的关键词使用相同的语法,从现有的用于创建测试用例
 安装安装 WxPython安装Ride的前置条件下载页面： http://wx">
-<meta property="og:updated_time" content="2017-06-07T09:32:25.000Z">
+<meta property="og:updated_time" content="2017-06-29T03:30:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RobotFramework">
 <meta name="twitter:description" content="RobotFramework使用手册简介RobotFramework是一个通用的测试自动化框架验收测试和验收测试驱动开发(ATDD)。它易于使用的表格测试数据的语法和使用关键字驱动的测试方法。它的测试功能可以使用测试库与Python或Java实现,用户可以创建新的更高层次的关键词使用相同的语法,从现有的用于创建测试用例
@@ -181,7 +181,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle"></p>
+        <p class="site-subtitle">简单</p>
       
   </div>
 
@@ -207,6 +207,26 @@
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
             首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
           </a>
         </li>
       
@@ -264,7 +284,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zhang dong">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/me.JPG">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -302,6 +322,17 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/06/07/RobotFramework/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/06/07/RobotFramework/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -309,6 +340,37 @@
 
           
 
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  
+                </span>
+              
+            </div>
           
 
           
@@ -330,6 +392,9 @@
 <h2 id="RF常用包"><a href="#RF常用包" class="headerlink" title="RF常用包"></a>RF常用包</h2><p>pip install robotframework-requests<br>pip install demjson<br>Wiki：<a href="http://robotframework.org/robotframework/latest/libraries/XML.html" target="_blank" rel="external">http://robotframework.org/robotframework/latest/libraries/XML.html</a><br>pip install robotframework-databaselibrary<br>pip install PyMySQL</p>
 <h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><p>解决robotframework 3.0打印中文为unicode编码问题<br><a href="http://www.robotframework.net/?/article/94" target="_blank" rel="external">http://www.robotframework.net/?/article/94</a></p>
 <p>读取数据库时中文返回“？？”时，注意在Connect To Database Using Custom Params的连接后加入charset=’utf8’</p>
+<p>linux上中文兼容解决：<br>例子： Unexpected error: UnicodeDecodeError: ‘ascii’ codec can’t decode byte 0xe6 in position 977: ordinal not in range(128)</p>
+<p>修改：/usr/lib/python2.7/site-packages/HttpLibrary/livetest.py<br>/usr/lib/python2.7/site-packages/HttpLibrary/<strong>init</strong>.py<br>加入： reload(sys)<br>sys.setdefaultencoding(‘utf8’)</p>
+<p>删除.pyc文件</p>
 
       
     </div>
@@ -382,6 +447,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2017/06/29/springcloud调优/" rel="prev" title="springcloud调优(Dalston.RELEASE版本)">
+                springcloud调优(Dalston.RELEASE版本) <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -405,6 +474,13 @@
 
           
   <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
     
   </div>
 
@@ -440,11 +516,11 @@
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/images/avatar.gif"
+               src="/images/me.JPG"
                alt="zhang dong" />
           <p class="site-author-name" itemprop="name">zhang dong</p>
            
-              <p class="site-description motion-element" itemprop="description"></p>
+              <p class="site-description motion-element" itemprop="description">Make my life plan and use my life to perform.</p>
           
         </div>
         <nav class="site-state motion-element">
@@ -452,7 +528,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-count">29</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -464,10 +540,10 @@
             
             
             <div class="site-state-item site-state-tags">
-              
+              <a href="/tags/index.html">
                 <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">标签</span>
-              
+              </a>
             </div>
           
 
@@ -633,6 +709,26 @@
 
   
 
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2017/06/07/RobotFramework/';
+          this.page.identifier = '2017/06/07/RobotFramework/';
+          this.page.title = 'RobotFramework';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
 
   
 
