@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Keepalived," />
+  <meta name="keywords" content="consul,eureka," />
 
 
 
@@ -93,16 +93,28 @@
 
 
 
-<meta name="description" content="Keepalived的作用是检测web服务器的状态，如果有一台web服务器死机，或工作出现故障，Keepalived将检测到，并将有故障的web服务器从系统中剔除，当web服务器工作正常后Keepalived自动将web服务器加入到服务器群中，这些工作全部自动完成，不需要人工干涉，需要人工做的只是修复故障的web服务器。工作原理">
+<meta name="description" content="consul 与 eureka场景consul适用场景ca 强一致性
+eureka适用场景ap 可靠性
+nginx动态发现zuulconsul通过consul-template实现
+eureka可以通过zuul的启动脚本+定时任务实现
+定时通过rest(https://github.com/Netflix/eureka/wiki/Eureka-REST-operations)轮训eureka中zu">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Keepalived">
-<meta property="og:url" content="http://yoursite.com/2014/11/29/Keepalived/index.html">
+<meta property="og:title" content="consul vs eureka">
+<meta property="og:url" content="http://yoursite.com/2017/09/25/consul-vs-eureka/index.html">
 <meta property="og:site_name" content="Mr.栋">
-<meta property="og:description" content="Keepalived的作用是检测web服务器的状态，如果有一台web服务器死机，或工作出现故障，Keepalived将检测到，并将有故障的web服务器从系统中剔除，当web服务器工作正常后Keepalived自动将web服务器加入到服务器群中，这些工作全部自动完成，不需要人工干涉，需要人工做的只是修复故障的web服务器。工作原理">
-<meta property="og:updated_time" content="2016-06-07T04:35:24.000Z">
+<meta property="og:description" content="consul 与 eureka场景consul适用场景ca 强一致性
+eureka适用场景ap 可靠性
+nginx动态发现zuulconsul通过consul-template实现
+eureka可以通过zuul的启动脚本+定时任务实现
+定时通过rest(https://github.com/Netflix/eureka/wiki/Eureka-REST-operations)轮训eureka中zu">
+<meta property="og:updated_time" content="2017-09-25T02:57:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Keepalived">
-<meta name="twitter:description" content="Keepalived的作用是检测web服务器的状态，如果有一台web服务器死机，或工作出现故障，Keepalived将检测到，并将有故障的web服务器从系统中剔除，当web服务器工作正常后Keepalived自动将web服务器加入到服务器群中，这些工作全部自动完成，不需要人工干涉，需要人工做的只是修复故障的web服务器。工作原理">
+<meta name="twitter:title" content="consul vs eureka">
+<meta name="twitter:description" content="consul 与 eureka场景consul适用场景ca 强一致性
+eureka适用场景ap 可靠性
+nginx动态发现zuulconsul通过consul-template实现
+eureka可以通过zuul的启动脚本+定时任务实现
+定时通过rest(https://github.com/Netflix/eureka/wiki/Eureka-REST-operations)轮训eureka中zu">
 
 
 
@@ -130,13 +142,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2014/11/29/Keepalived/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/09/25/consul-vs-eureka/"/>
 
 
 
 
 
-  <title>Keepalived | Mr.栋</title>
+  <title>consul vs eureka | Mr.栋</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -266,7 +278,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/11/29/Keepalived/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/25/consul-vs-eureka/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zhang dong">
@@ -283,7 +295,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Keepalived</h1>
+          <h1 class="post-title" itemprop="name headline">consul vs eureka</h1>
         
 
         <div class="post-meta">
@@ -295,8 +307,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-11-29T12:33:36+08:00">
-                2014-11-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-25T10:54:51+08:00">
+                2017-09-25
               </time>
             
 
@@ -314,9 +326,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2014/11/29/Keepalived/#comments" itemprop="discussionUrl">
+                <a href="/2017/09/25/consul-vs-eureka/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2014/11/29/Keepalived/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/09/25/consul-vs-eureka/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -341,10 +353,12 @@
       
 
       
-        <p>Keepalived的作用是检测web服务器的状态，如果有一台web服务器死机，或工作出现故障，Keepalived将检测到，并将有故障的web服务器从系统中剔除，当web服务器工作正常后Keepalived自动将web服务器加入到服务器群中，这些工作全部自动完成，不需要人工干涉，需要人工做的只是修复故障的web服务器。<br>工作原理<br><a id="more"></a><br>Layer3,4&amp;7工作在IP/TCP协议栈的IP层，TCP层，及应用层,原理分别如下：</p>
-<p>Layer3：Keepalived使用Layer3的方式工作式时，Keepalived会定期向服务器群中的服务器发送一个ICMP的数据包（既我们平时用的Ping程序）,如果发现某台服务的IP地址没有激活，Keepalived便报告这台服务器失效，并将它从服务器群中剔除，这种情况的典型例子是某台服务器被非法关机。Layer3的方式是以服务器的IP地址是否有效作为服务器工作正常与否的标准。</p>
-<p>Layer4:如果您理解了Layer3的方式，Layer4就容易了。Layer4主要以TCP端口的状态来决定服务器工作正常与否。如web server的服务端口一般是80，如果Keepalived检测到80端口没有启动，则Keepalived将把这台服务器从服务器群中剔除。</p>
-<p>Layer7：Layer7就是工作在具体的应用层了，比Layer3,Layer4要复杂一点，在网络上占用的带宽也要大一些。Keepalived将根据用户的设定检查服务器程序的运行是否正常，如果与用户的设定不相符，则Keepalived将把服务器从服务器群中剔除。</p>
+        <h2 id="consul-与-eureka"><a href="#consul-与-eureka" class="headerlink" title="consul 与 eureka"></a>consul 与 eureka</h2><h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><p>consul适用场景ca 强一致性</p>
+<p>eureka适用场景ap 可靠性</p>
+<h3 id="nginx动态发现zuul"><a href="#nginx动态发现zuul" class="headerlink" title="nginx动态发现zuul"></a>nginx动态发现zuul</h3><p>consul通过consul-template实现</p>
+<p>eureka可以通过zuul的启动脚本+定时任务实现</p>
+<p>定时通过rest(<a href="https://github.com/Netflix/eureka/wiki/Eureka-REST-operations)轮训eureka中zuul的状态是否和nginx配置文件中的信息是否一致,不一致则reload" target="_blank" rel="external">https://github.com/Netflix/eureka/wiki/Eureka-REST-operations)轮训eureka中zuul的状态是否和nginx配置文件中的信息是否一致,不一致则reload</a>.</p>
+<h3 id="consul缺点"><a href="#consul缺点" class="headerlink" title="consul缺点"></a>consul缺点</h3><p>consul重启后不自动加载已注册的服务</p>
 
       
     </div>
@@ -379,7 +393,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Keepalived/" rel="tag"># Keepalived</a>
+            <a href="/tags/consul/" rel="tag"># consul</a>
+          
+            <a href="/tags/eureka/" rel="tag"># eureka</a>
           
         </div>
       
@@ -392,8 +408,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2014/08/17/事物的隔离级别/" rel="next" title="事物的隔离级别">
-                <i class="fa fa-chevron-left"></i> 事物的隔离级别
+              <a href="/2017/06/29/springcloud调优/" rel="next" title="springcloud调优(Dalston.RELEASE版本)">
+                <i class="fa fa-chevron-left"></i> springcloud调优(Dalston.RELEASE版本)
               </a>
             
           </div>
@@ -401,10 +417,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/06/07/系统安全/" rel="prev" title="系统安全">
-                系统安全 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -458,8 +470,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/me.JPG"
@@ -512,6 +533,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#consul-与-eureka"><span class="nav-number">1.</span> <span class="nav-text">consul 与 eureka</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#场景"><span class="nav-number">1.1.</span> <span class="nav-text">场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nginx动态发现zuul"><span class="nav-number">1.2.</span> <span class="nav-text">nginx动态发现zuul</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#consul缺点"><span class="nav-number">1.3.</span> <span class="nav-text">consul缺点</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -649,9 +686,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2014/11/29/Keepalived/';
-          this.page.identifier = '2014/11/29/Keepalived/';
-          this.page.title = 'Keepalived';
+          this.page.url = 'http://yoursite.com/2017/09/25/consul-vs-eureka/';
+          this.page.identifier = '2017/09/25/consul-vs-eureka/';
+          this.page.title = 'consul vs eureka';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://.disqus.com/embed.js';

@@ -267,6 +267,134 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/25/consul-vs-eureka/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zhang dong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/me.JPG">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.栋">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/25/consul-vs-eureka/" itemprop="url">consul vs eureka</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-25T10:54:51+08:00">
+                2017-09-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/09/25/consul-vs-eureka/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/09/25/consul-vs-eureka/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="consul-与-eureka"><a href="#consul-与-eureka" class="headerlink" title="consul 与 eureka"></a>consul 与 eureka</h2><h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><p>consul适用场景ca 强一致性</p>
+<p>eureka适用场景ap 可靠性</p>
+<h3 id="nginx动态发现zuul"><a href="#nginx动态发现zuul" class="headerlink" title="nginx动态发现zuul"></a>nginx动态发现zuul</h3><p>consul通过consul-template实现</p>
+<p>eureka可以通过zuul的启动脚本+定时任务实现</p>
+<p>定时通过rest(<a href="https://github.com/Netflix/eureka/wiki/Eureka-REST-operations)轮训eureka中zuul的状态是否和nginx配置文件中的信息是否一致,不一致则reload" target="_blank" rel="external">https://github.com/Netflix/eureka/wiki/Eureka-REST-operations)轮训eureka中zuul的状态是否和nginx配置文件中的信息是否一致,不一致则reload</a>.</p>
+<h3 id="consul缺点"><a href="#consul缺点" class="headerlink" title="consul缺点"></a>consul缺点</h3><p>consul重启后不自动加载已注册的服务</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/29/springcloud调优/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -474,11 +602,14 @@
 <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="安装-WxPython"><a href="#安装-WxPython" class="headerlink" title="安装 WxPython"></a>安装 WxPython</h3><p>安装Ride的前置条件<br>下载页面： <a href="http://wxpython.org/download.php#stable。" target="_blank" rel="external">http://wxpython.org/download.php#stable。</a><br>在选择版本下载的时候要注意选择与 Python 版本对应的版本，并且选择 unicode 版本，比如版本：wxPython2.8-win32-unicode-py26.exe，否则安装完成后不能支持中文。<br>下载完成后，选择默认项进行安装即可。</p>
 <h3 id="安装-Robot-Framework"><a href="#安装-Robot-Framework" class="headerlink" title="安装 Robot Framework"></a>安装 Robot Framework</h3><p>简称RF，是基于python语言封装的一套自动化测试框架。<br>进入 Python 的安装路径，执行命令“pip install robotframework”或者通过下载页面 <a href="https://pypi.python.org/pypi/robotframework下载源码。" target="_blank" rel="external">https://pypi.python.org/pypi/robotframework下载源码。</a><br>解压后，执行命令“python setup.py install”进行安装。进入 Python 的安装路径，执行命令“pip install robotframework”。</p>
 <h3 id="安装-robotframework-ride"><a href="#安装-robotframework-ride" class="headerlink" title="安装 robotframework-ride"></a>安装 robotframework-ride</h3><p>Ride是编辑器也就是测试人员编写case用的工具。<br>进入 Python 的安装路径，执行命令“pip install robotframework-ride”。</p>
-<h2 id="RF常用包"><a href="#RF常用包" class="headerlink" title="RF常用包"></a>RF常用包</h2><p>pip install robotframework-requests<br>pip install demjson<br>Wiki：<a href="http://robotframework.org/robotframework/latest/libraries/XML.html" target="_blank" rel="external">http://robotframework.org/robotframework/latest/libraries/XML.html</a><br>pip install robotframework-databaselibrary<br>pip install PyMySQL</p>
+<h2 id="RF常用包"><a href="#RF常用包" class="headerlink" title="RF常用包"></a>RF常用包</h2><p>pip install robotframework-requests<br>pip install robotframework-httplibrary<br>pip install demjson<br>Wiki：<a href="http://robotframework.org/robotframework/latest/libraries/XML.html" target="_blank" rel="external">http://robotframework.org/robotframework/latest/libraries/XML.html</a><br>pip install robotframework-databaselibrary<br>pip install PyMySQL</p>
 <h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><p>解决robotframework 3.0打印中文为unicode编码问题<br><a href="http://www.robotframework.net/?/article/94" target="_blank" rel="external">http://www.robotframework.net/?/article/94</a></p>
 <p>读取数据库时中文返回“？？”时，注意在Connect To Database Using Custom Params的连接后加入charset=’utf8’</p>
 <p>linux上中文兼容解决：<br>例子： Unexpected error: UnicodeDecodeError: ‘ascii’ codec can’t decode byte 0xe6 in position 977: ordinal not in range(128)</p>
-<p>修改：/usr/lib/python2.7/site-packages/HttpLibrary/livetest.py<br>/usr/lib/python2.7/site-packages/HttpLibrary/<strong>init</strong>.py<br>加入： reload(sys)<br>sys.setdefaultencoding(‘utf8’)</p>
+<p>修改：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/usr/lib/python2.7/site-packages/HttpLibrary/livetest.py</span><br><span class="line">/usr/lib/python2.7/site-packages/HttpLibrary/__init__.py</span><br></pre></td></tr></table></figure>
+<p>加入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding(&apos;utf8&apos;)</span><br></pre></td></tr></table></figure>
 <p>删除.pyc文件</p>
 
           
@@ -1443,134 +1574,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/29/springboot项目redis（master－slave模式）连接池自动切换/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="zhang dong">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/me.JPG">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.栋">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/07/29/springboot项目redis（master－slave模式）连接池自动切换/" itemprop="url">springboot项目redis（master－slave模式）连接池自动切换</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-29T11:16:33+08:00">
-                2016-07-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2016/07/29/springboot项目redis（master－slave模式）连接池自动切换/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2016/07/29/springboot项目redis（master－slave模式）连接池自动切换/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>由于云服务器存在闪断现象，项目线上会存在基于redis的功能在闪断时段内出现异常，所以redis需要做master－slave模式。直接上代码：</p>
-<p>原单机redis，RedisConnectionFactory设置代码<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/07/29/springboot项目redis（master－slave模式）连接池自动切换/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1620,7 +1623,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-count">30</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1633,7 +1636,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-count">43</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
