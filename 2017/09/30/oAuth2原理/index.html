@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="https,http,tcp,socket," />
+  <meta name="keywords" content="oAuth2," />
 
 
 
@@ -93,18 +93,27 @@
 
 
 
-<meta name="description" content="网络协议TCP/IP是传输层协议,主要解决数据在网络中的传输.Http是应用层的协议,用于如何封装数据.传输数据的时候,只使用TCP/IP协议(传输层).如果没有应用层来识别数据内容,传输后的协议都是无用的.       应用层协议很多,FTP,HTTP,TELNET等,可以自己定义应用层协议.WEB使用HTTP作传输层协议.以封装HTTP文本信息,然后使用TCP/IP做传输层协议,将数据发送到网">
+<meta name="description" content="oAuth2原理模式客户端模式（Client Credentials Grant）用于api资源保护
+密码模式（Resource Owner Password Credentials Grant）用于集成用户体系
+简化模式（implicit grant type）不常用
+授权码模式（authorization code）功能最完整的授权模式,用于第三方登录,类似微博">
 <meta property="og:type" content="article">
-<meta property="og:title" content="网络协议">
-<meta property="og:url" content="http://yoursite.com/2016/12/05/网络协议/index.html">
+<meta property="og:title" content="oAuth2原理">
+<meta property="og:url" content="http://yoursite.com/2017/09/30/oAuth2原理/index.html">
 <meta property="og:site_name" content="Mr.栋">
-<meta property="og:description" content="网络协议TCP/IP是传输层协议,主要解决数据在网络中的传输.Http是应用层的协议,用于如何封装数据.传输数据的时候,只使用TCP/IP协议(传输层).如果没有应用层来识别数据内容,传输后的协议都是无用的.       应用层协议很多,FTP,HTTP,TELNET等,可以自己定义应用层协议.WEB使用HTTP作传输层协议.以封装HTTP文本信息,然后使用TCP/IP做传输层协议,将数据发送到网">
-<meta property="og:image" content="http://yoursite.com/img/WechatIMG180.jpg">
-<meta property="og:updated_time" content="2016-12-05T06:44:12.000Z">
+<meta property="og:description" content="oAuth2原理模式客户端模式（Client Credentials Grant）用于api资源保护
+密码模式（Resource Owner Password Credentials Grant）用于集成用户体系
+简化模式（implicit grant type）不常用
+授权码模式（authorization code）功能最完整的授权模式,用于第三方登录,类似微博">
+<meta property="og:image" content="http://yoursite.com/img/oauthclientflow.jpg">
+<meta property="og:updated_time" content="2017-09-30T03:37:59.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="网络协议">
-<meta name="twitter:description" content="网络协议TCP/IP是传输层协议,主要解决数据在网络中的传输.Http是应用层的协议,用于如何封装数据.传输数据的时候,只使用TCP/IP协议(传输层).如果没有应用层来识别数据内容,传输后的协议都是无用的.       应用层协议很多,FTP,HTTP,TELNET等,可以自己定义应用层协议.WEB使用HTTP作传输层协议.以封装HTTP文本信息,然后使用TCP/IP做传输层协议,将数据发送到网">
-<meta name="twitter:image" content="http://yoursite.com/img/WechatIMG180.jpg">
+<meta name="twitter:title" content="oAuth2原理">
+<meta name="twitter:description" content="oAuth2原理模式客户端模式（Client Credentials Grant）用于api资源保护
+密码模式（Resource Owner Password Credentials Grant）用于集成用户体系
+简化模式（implicit grant type）不常用
+授权码模式（authorization code）功能最完整的授权模式,用于第三方登录,类似微博">
+<meta name="twitter:image" content="http://yoursite.com/img/oauthclientflow.jpg">
 
 
 
@@ -132,13 +141,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/12/05/网络协议/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/09/30/oAuth2原理/"/>
 
 
 
 
 
-  <title>网络协议 | Mr.栋</title>
+  <title>oAuth2原理 | Mr.栋</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -268,7 +277,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/05/网络协议/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/30/oAuth2原理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zhang dong">
@@ -285,7 +294,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">网络协议</h1>
+          <h1 class="post-title" itemprop="name headline">oAuth2原理</h1>
         
 
         <div class="post-meta">
@@ -297,8 +306,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-05T14:29:08+08:00">
-                2016-12-05
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-30T11:33:37+08:00">
+                2017-09-30
               </time>
             
 
@@ -316,9 +325,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/12/05/网络协议/#comments" itemprop="discussionUrl">
+                <a href="/2017/09/30/oAuth2原理/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2016/12/05/网络协议/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/09/30/oAuth2原理/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -343,34 +352,12 @@
       
 
       
-        <h2 id="网络协议"><a href="#网络协议" class="headerlink" title="网络协议"></a>网络协议</h2><p>TCP/IP是传输层协议,主要解决数据在网络中的传输.Http是应用层的协议,用于如何封装数据.传输数据的时候,只使用TCP/IP协议(传输层).如果没有应用层来识别数据内容,传输后的协议都是无用的.<br>       应用层协议很多,FTP,HTTP,TELNET等,可以自己定义应用层协议.WEB使用HTTP作传输层协议.以封装HTTP文本信息,然后使用TCP/IP做传输层协议,将数据发送到网络上.</p>
-<p>Socket是对TCP/IP协议的封装,Socket只是个接口,不是协议,通过Socket,我们才能使用TCP/IP协议.<br>当然,除了TCP,也可以使用UDP协议来传递数据.</p>
-<p>三 HTTP和Socket连接区别</p>
-<p>1 TCP连接<br>       要想明白Socket,必须要理解TCP连接.<br>        建立TCP连接的”三次握手”:<br>        第一次:客户端向服务器发送SYN包(syn=j),同时自己处于SYN_SEND状态.<br>        第二次:服务器端收到SYN包后,必须确认客户的SYN(syn=j+1),同时也发送一个SYN包(syn=k),即SYN+ACK包,此时服务器进入SYN_RECV状态.<br>        第三次:客户端收到服务器发来的SYN+ACK包,就向服务器发送SYN(syn=k+1),发送完毕后,服务器和客户端都进入ESTABLISHED状态.完成三次握手.<br>握手过程中,并不传输数据.在握手后,服务器与客户端才开始传输数据,理想状态下,TCP连接一旦建立,在通讯双方中的任何一方主动断开连接之前,TCP连接会一直保持下去.</p>
-<p>2 HTTP连接<br>       HTTP最显著的特点:客户端发送请求都需要服务器端回送响应.请求结束后,主动释放链接.HTTP是一种短连接.通常的做法是,不需要任何数据,也要保持每隔一段时间向服务器发送”保持连接”的请求.这样可以保证客户端在服务器端是”上线”状态.</p>
+        <h1 id="oAuth2原理"><a href="#oAuth2原理" class="headerlink" title="oAuth2原理"></a>oAuth2原理</h1><h2 id="模式"><a href="#模式" class="headerlink" title="模式"></a>模式</h2><h3 id="客户端模式（Client-Credentials-Grant）"><a href="#客户端模式（Client-Credentials-Grant）" class="headerlink" title="客户端模式（Client Credentials Grant）"></a>客户端模式（Client Credentials Grant）</h3><p>用于api资源保护</p>
+<h3 id="密码模式（Resource-Owner-Password-Credentials-Grant）"><a href="#密码模式（Resource-Owner-Password-Credentials-Grant）" class="headerlink" title="密码模式（Resource Owner Password Credentials Grant）"></a>密码模式（Resource Owner Password Credentials Grant）</h3><p>用于集成用户体系</p>
+<h3 id="简化模式（implicit-grant-type）"><a href="#简化模式（implicit-grant-type）" class="headerlink" title="简化模式（implicit grant type）"></a>简化模式（implicit grant type）</h3><p>不常用</p>
+<h3 id="授权码模式（authorization-code）"><a href="#授权码模式（authorization-code）" class="headerlink" title="授权码模式（authorization code）"></a>授权码模式（authorization code）</h3><p>功能最完整的授权模式,用于第三方登录,类似微博</p>
 <a id="more"></a>
-<p>3 socket原理<br>       Socket连接,至少需要一对套接字,分为clientSocket,serverSocket.连接分为3个步骤:<br>服务器监听:服务器并不定位具体客户端的套接字,而是时刻处于监听状态.<br>客户端请求:客户端的套接字要描述它要连接的服务器的套接字.提供地址和端口号,然后向服务器套接字提出连接请求.<br>连接确认:当服务器套接字收到客户端套接字发来的请求后,就响应客户端套接字的请求,并建立一个新的线程,把服务器端的套接字的描述发给客户端,一旦客户端确认了此描述,就正式建立连接.而服务器套接字继续处于监听状态,继续接收其他客户端套接字的连接请求.</p>
-<p>4 Socket连接与TCP连接<br>       创建Socket连接的时候,可以指定传输层协议.可以是TCP或者UDP,当用TCP连接,该Socket就是个TCP连接.</p>
-<p>5 Socket连接与HTTP连接<br>       通常情况下Socket连接就是TCP连接,因此Socket连接一旦建立,通讯双方开始互发数据内容,直到双方断开连接.在实际应用中,由于网络节点过多,在传输过程中,会被节点断开连接.因此要通过轮询高速网络,该节点处于活跃状态.<br>HTTP连接使用的是”请求-响应”方式,不仅在请求时建立连接,而且客户端向服务器端请求后,服务器才返回数据.</p>
-<p>很多情况下,都是需要服务器端向客户端主动推送数据,保持客户端与服务端的实时同步.若双方是Socket连接,可以由服务器直接向客户端发送数据.若双方是HTTP连接,则服务器需要等客户端发送请求后,才能将数据回传给客户端.因此,客户端定时向服务器端发送请求,不仅可以保持在线,同时也询问服务器是否有新数据,如果有就将数据传给客户端.</p>
-<p>HTTPS的工作原理</p>
-<p>HTTPS在传输数据之前需要客户端（浏览器）与服务端（网站）之间进行一次握手，在握手过程中将确立双方加密传输数据的密码信息。TLS/SSL协议不仅仅是一套加密传输的协议，更是一件经过艺术家精心设计的艺术品，TLS/SSL中使用了非对称加密，对称加密以及HASH算法。握手过程的简单描述如下：</p>
-<p>1.浏览器将自己支持的一套加密规则发送给网站。</p>
-<p>2.网站从中选出一组加密算法与HASH算法，并将自己的身份信息以证书的形式发回给浏览器。证书里面包含了网站地址，加密公钥，以及证书的颁发机构等信息。</p>
-<p>3.获得网站证书之后浏览器要做以下工作：</p>
-<p>a) 验证证书的合法性（颁发证书的机构是否合法，证书中包含的网站地址是否与正在访问的地址一致等），如果证书受信任，则浏览器栏里面会显示一个小锁头，否则会给出证书不受信的提示。</p>
-<p>b) 如果证书受信任，或者是用户接受了不受信的证书，浏览器会生成一串随机数的密码，并用证书中提供的公钥加密。</p>
-<p>c) 使用约定好的HASH计算握手消息，并使用生成的随机数对消息进行加密，最后将之前生成的所有信息发送给网站。</p>
-<p>4.网站接收浏览器发来的数据之后要做以下的操作：</p>
-<p>a) 使用自己的私钥将信息解密取出密码，使用密码解密浏览器发来的握手消息，并验证HASH是否与浏览器发来的一致。</p>
-<p>b) 使用密码加密一段握手消息，发送给浏览器。</p>
-<p>5.浏览器解密并计算握手消息的HASH，如果与服务端发来的HASH一致，此时握手过程结束，之后所有的通信数据将由之前浏览器生成的随机密码并利用对称加密算法进行加密。</p>
-<p>这里浏览器与网站互相发送加密的握手消息并验证，目的是为了保证双方都获得了一致的密码，并且可以正常的加密解密数据，为后续真正数据的传输做一次测试。另外，HTTPS一般使用的加密与HASH算法如下：</p>
-<p>非对称加密算法：RSA，DSA/DSS</p>
-<p>对称加密算法：AES，RC4，3DES</p>
-<p>HASH算法：MD5，SHA1，SHA256</p>
-<p>其中非对称加密算法用于在握手过程中加密生成的密码，对称加密算法用于对真正传输的数据进行加密，而HASH算法用于验证数据的完整性。由于浏览器生成的密码是整个数据加密的关键，因此在传输的时候使用了非对称加密算法对其加密。非对称加密算法会生成公钥和私钥，公钥只能用于加密数据，因此可以随意传输，而网站的私钥用于对数据进行解密，所以网站都会非常小心的保管自己的私钥，防止泄漏。</p>
-<p><img src="/img/WechatIMG180.jpg" alt="img"></p>
+<h2 id="客户端模式"><a href="#客户端模式" class="headerlink" title="客户端模式"></a>客户端模式</h2><h3 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/img/oauthclientflow.jpg" alt="img"></p>
 
       
     </div>
@@ -405,13 +392,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/https/" rel="tag"># https</a>
-          
-            <a href="/tags/http/" rel="tag"># http</a>
-          
-            <a href="/tags/tcp/" rel="tag"># tcp</a>
-          
-            <a href="/tags/socket/" rel="tag"># socket</a>
+            <a href="/tags/oAuth2/" rel="tag"># oAuth2</a>
           
         </div>
       
@@ -424,8 +405,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/11/swarm集群运行springboot服务/" rel="next" title="swarm集群运行springboot服务">
-                <i class="fa fa-chevron-left"></i> swarm集群运行springboot服务
+              <a href="/2017/09/25/consul-vs-eureka/" rel="next" title="consul vs eureka">
+                <i class="fa fa-chevron-left"></i> consul vs eureka
               </a>
             
           </div>
@@ -433,10 +414,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/12/09/限流策略/" rel="prev" title="限流策略">
-                限流策略 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -563,7 +540,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#网络协议"><span class="nav-number">1.</span> <span class="nav-text">网络协议</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#oAuth2原理"><span class="nav-number">1.</span> <span class="nav-text">oAuth2原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模式"><span class="nav-number">1.1.</span> <span class="nav-text">模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端模式（Client-Credentials-Grant）"><span class="nav-number">1.1.1.</span> <span class="nav-text">客户端模式（Client Credentials Grant）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#密码模式（Resource-Owner-Password-Credentials-Grant）"><span class="nav-number">1.1.2.</span> <span class="nav-text">密码模式（Resource Owner Password Credentials Grant）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#简化模式（implicit-grant-type）"><span class="nav-number">1.1.3.</span> <span class="nav-text">简化模式（implicit grant type）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#授权码模式（authorization-code）"><span class="nav-number">1.1.4.</span> <span class="nav-text">授权码模式（authorization code）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端模式"><span class="nav-number">1.2.</span> <span class="nav-text">客户端模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#流程图"><span class="nav-number">1.2.1.</span> <span class="nav-text">流程图</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -706,9 +683,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2016/12/05/网络协议/';
-          this.page.identifier = '2016/12/05/网络协议/';
-          this.page.title = '网络协议';
+          this.page.url = 'http://yoursite.com/2017/09/30/oAuth2原理/';
+          this.page.identifier = '2017/09/30/oAuth2原理/';
+          this.page.title = 'oAuth2原理';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://.disqus.com/embed.js';
