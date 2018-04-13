@@ -93,25 +93,24 @@
 
 
 
-<meta name="description" content="spring cloud 总结eureka实现思路在com.netflix.discovery.DiscoveryClient启动的时候，会初始化一个定时任务，定时的把本地的服务配置信息，即需要注册到远端的服务信息自动刷新到注册服务器上。
-eureka优势zk优点：
-Eureka提供了一个客户端库，该库提供了服务心跳、服务健康检查、自动发布及缓存刷新等功能。
-如果使用ZooKeeper，这些功能都">
+<meta name="description" content="spring cloud 总结
+eureka实现思路在com.netflix.discovery.DiscoveryClient启动的时候，会初始化一个定时任务，定时的把本地的服务配置信息，即需要注册到远端的服务信息自动刷新到注册服务器上。
+通过http方式与服务交互,每个服务会以心跳的方式通知eureka,eureka会统计最后一分钟内的心跳次数(Renews (last min)),如果心跳次">
 <meta property="og:type" content="article">
 <meta property="og:title" content="springcloud">
 <meta property="og:url" content="http://yoursite.com/2016/06/28/springcloud/index.html">
 <meta property="og:site_name" content="Mr.栋">
-<meta property="og:description" content="spring cloud 总结eureka实现思路在com.netflix.discovery.DiscoveryClient启动的时候，会初始化一个定时任务，定时的把本地的服务配置信息，即需要注册到远端的服务信息自动刷新到注册服务器上。
-eureka优势zk优点：
-Eureka提供了一个客户端库，该库提供了服务心跳、服务健康检查、自动发布及缓存刷新等功能。
-如果使用ZooKeeper，这些功能都">
-<meta property="og:updated_time" content="2017-05-11T07:51:22.000Z">
+<meta property="og:description" content="spring cloud 总结
+eureka实现思路在com.netflix.discovery.DiscoveryClient启动的时候，会初始化一个定时任务，定时的把本地的服务配置信息，即需要注册到远端的服务信息自动刷新到注册服务器上。
+通过http方式与服务交互,每个服务会以心跳的方式通知eureka,eureka会统计最后一分钟内的心跳次数(Renews (last min)),如果心跳次">
+<meta property="og:image" content="http://yoursite.com/img/springcloud.png">
+<meta property="og:updated_time" content="2018-04-13T06:02:46.231Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="springcloud">
-<meta name="twitter:description" content="spring cloud 总结eureka实现思路在com.netflix.discovery.DiscoveryClient启动的时候，会初始化一个定时任务，定时的把本地的服务配置信息，即需要注册到远端的服务信息自动刷新到注册服务器上。
-eureka优势zk优点：
-Eureka提供了一个客户端库，该库提供了服务心跳、服务健康检查、自动发布及缓存刷新等功能。
-如果使用ZooKeeper，这些功能都">
+<meta name="twitter:description" content="spring cloud 总结
+eureka实现思路在com.netflix.discovery.DiscoveryClient启动的时候，会初始化一个定时任务，定时的把本地的服务配置信息，即需要注册到远端的服务信息自动刷新到注册服务器上。
+通过http方式与服务交互,每个服务会以心跳的方式通知eureka,eureka会统计最后一分钟内的心跳次数(Renews (last min)),如果心跳次">
+<meta name="twitter:image" content="http://yoursite.com/img/springcloud.png">
 
 
 
@@ -350,7 +349,14 @@ Eureka提供了一个客户端库，该库提供了服务心跳、服务健康�
       
 
       
-        <h2 id="spring-cloud-总结"><a href="#spring-cloud-总结" class="headerlink" title="spring cloud 总结"></a>spring cloud 总结</h2><h3 id="eureka"><a href="#eureka" class="headerlink" title="eureka"></a>eureka</h3><h4 id="实现思路"><a href="#实现思路" class="headerlink" title="实现思路"></a>实现思路</h4><p>在com.netflix.discovery.DiscoveryClient启动的时候，会初始化一个定时任务，定时的把本地的服务配置信息，即需要注册到远端的服务信息自动刷新到注册服务器上。</p>
+        <h2 id="spring-cloud-总结"><a href="#spring-cloud-总结" class="headerlink" title="spring cloud 总结"></a>spring cloud 总结</h2><p><img src="/img/springcloud.png" alt="image"></p>
+<h3 id="eureka"><a href="#eureka" class="headerlink" title="eureka"></a>eureka</h3><h4 id="实现思路"><a href="#实现思路" class="headerlink" title="实现思路"></a>实现思路</h4><p>在com.netflix.discovery.DiscoveryClient启动的时候，会初始化一个定时任务，定时的把本地的服务配置信息，即需要注册到远端的服务信息自动刷新到注册服务器上。</p>
+<p>通过http方式与服务交互,每个服务会以心跳的方式通知eureka,eureka会统计最后一分钟内的心跳次数(Renews (last min)),如果心跳次数小于eureka的Renews threshold值则开启保护模式.</p>
+<p>eureka内部有定时任务清除已经过期的服务(既规定周期内(可以配置)没有心跳的服务)<br>心跳周期也可以配置</p>
+<p>相应的每个服务都会缓存eureka的注册信息提高效率</p>
+<p><a href="https://github.com/Netflix/eureka/wiki/Eureka-REST-operations" target="_blank" rel="external">https://github.com/Netflix/eureka/wiki/Eureka-REST-operations</a></p>
+<p><a href="http://tietang.wang/" target="_blank" rel="external">http://tietang.wang/</a></p>
+<p><a href="http://fanlychie.github.io/post/spring-cloud-netflix-eureka.html" target="_blank" rel="external">http://fanlychie.github.io/post/spring-cloud-netflix-eureka.html</a></p>
 <h4 id="eureka优势zk"><a href="#eureka优势zk" class="headerlink" title="eureka优势zk"></a>eureka优势zk</h4><p>优点：</p>
 <p>Eureka提供了一个客户端库，该库提供了服务心跳、服务健康检查、自动发布及缓存刷新等功能。</p>
 <p>如果使用ZooKeeper，这些功能都需要自己实现，并且zookeeper通过心跳发现服务不可用时，会立即删除注册到zookeeper的服务；而eureka不会立即删除服务，因为注册的服务有可能只是因为网络轻微波动导致无法发送心跳，并不是服务不可用。</p>
@@ -426,6 +432,7 @@ Eureka提供了一个客户端库，该库提供了服务心跳、服务健康�
 </tr>
 </tbody>
 </table>
+<p><a href="https://blog.csdn.net/dyc87112/article/details/73739485" target="_blank" rel="external">https://blog.csdn.net/dyc87112/article/details/73739485</a></p>
 <h3 id="zuul"><a href="#zuul" class="headerlink" title="zuul"></a>zuul</h3><p>适合做路由和方向代理，通常接入外网的服务可以借助该服务，或者除springcloud项目其他语言写的服务也可以用该服务作为反向代理。</p>
 <p>1.支持动态从eureka读取service_id，通过小写service_id为路径转发到相应服务</p>
 <p>2.支持手动文件配置方式，配置转发<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">zuul:</span><br><span class="line">  routes:</span><br><span class="line">    get:</span><br><span class="line">      path: /get/**</span><br><span class="line">      url: http://127.0.0.1:9099</span><br><span class="line">    my-service:</span><br><span class="line">      path: /BESTBUY-WX/**</span><br><span class="line">      serviceId: BESTBUY-WX</span><br><span class="line">    images:</span><br><span class="line">      path: /image/**</span><br><span class="line">      url: http://httpbin.org/image</span><br></pre></td></tr></table></figure></p>
@@ -438,7 +445,11 @@ Eureka提供了一个客户端库，该库提供了服务心跳、服务健康�
 <p>Hystrix最大的并发请求 execution.isolation.semaphore.maxConcurrentRequests ，这个值并非 TPS 、 QPS 、 RPS 等都是相对值，指的是1秒时间窗口内的事务/查询/请求， semaphore.maxConcurrentRequests 是一个绝对值，无时间窗口，相当于亚毫秒级的。当请求达到或超过该设置值后，其其余就会被拒绝。默认值是100。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">zuul.host.maxTotalConnections: 200</span><br><span class="line">zuul.host.maxPerRouteConnections: 10</span><br><span class="line">#zuul.semaphore.max-semaphores: 128</span><br><span class="line"># 建议使用这种方式来设置，可以给每个不同的后端微服务设置不同的信号量</span><br><span class="line">zuul.eureka.[service id].semaphore.maxSemaphores: 128</span><br></pre></td></tr></table></figure>
 <h3 id="Hystrix"><a href="#Hystrix" class="headerlink" title="Hystrix"></a>Hystrix</h3><p>断路器</p>
-<p>用于服务之间调用长时间无返回时自动失败策略<br>配置timeout</p>
+<p>当一段时间内有部分请求超时或者超出当前服务的并发量(可以设置)时,这些请求会调用降级方法,如果失败的请求数量大于一定的阈值(可以设置)时则断路器开启,断路器开启时则所有请求全部降级(为了保护后台服务),当一段时间后(可配置),断路器则变为尝试关闭状态,此时会放开部分请求,例如:100个请求40个可以正常处理,剩下60个则继续走降级方法,如果正常处理的40个请求中大部分处理成功则关闭断路器,此后所有请求都可以正常处理.</p>
+<p>线程隔离概念:保证一个服务出现了问题不会影响到其他服务</p>
+<p><a href="https://www.tuicool.com/articles/VVbuaeZ" target="_blank" rel="external">https://www.tuicool.com/articles/VVbuaeZ</a></p>
+<p><a href="https://www.tuicool.com/articles/ZzyyI32" target="_blank" rel="external">https://www.tuicool.com/articles/ZzyyI32</a></p>
+<p>配置timeout</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@HystrixCommand(fallbackMethod = &quot;timeout&quot;, commandProperties = &#123;</span><br><span class="line">           @HystrixProperty(name = &quot;execution.isolation.thread.timeoutInMilliseconds&quot;, value = &quot;3000&quot;)</span><br><span class="line">   &#125;)</span><br></pre></td></tr></table></figure>
 <h3 id="sleuth-zipkin"><a href="#sleuth-zipkin" class="headerlink" title="sleuth zipkin"></a>sleuth zipkin</h3><p>在spring cloud项目中sleth实现了一个分布式探针跟踪解决方案，借用了Dapper、zipkin和Htrace的思想；</p>
 <p>对于大多数用户来说探针是无感知的，并且能看到与其他系统的调用关系；</p>
@@ -611,7 +622,7 @@ cr：Client Received 客户端接收到的-表示span的结束。客户端已成
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-count">45</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -669,7 +680,7 @@ cr：Client Received 客户端接收到的-表示span的结束。客户端已成
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

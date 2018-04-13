@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="DDD," />
 
 
 
@@ -93,16 +93,25 @@
 
 
 
-<meta name="description" content="CQRS(命令查询责任分离)EVENTSOURCE(事件源)AGGRAGATE(聚合)">
+<meta name="description" content="CQRS(命令查询责任分离)命令操作和查询操作分开,当有命令操作时,正常执行业务逻辑后发个异步通知(观察者模型),然后对应的视图服务更新到订制的视图中(可以通过redis,mysql,es实现)
+EVENTSOURCE(事件源)数据库中无update,只有insert,会存在数据量过大的问题,解决办法,快照
+AGGRAGATE(聚合)聚合根,对应聚合做持久化模型
+限界上下文:划分服务1.考虑跨聚合">
 <meta property="og:type" content="article">
 <meta property="og:title" content="领域驱动小结">
 <meta property="og:url" content="http://yoursite.com/2017/01/20/领域驱动小结/index.html">
 <meta property="og:site_name" content="Mr.栋">
-<meta property="og:description" content="CQRS(命令查询责任分离)EVENTSOURCE(事件源)AGGRAGATE(聚合)">
-<meta property="og:updated_time" content="2017-06-29T05:13:32.000Z">
+<meta property="og:description" content="CQRS(命令查询责任分离)命令操作和查询操作分开,当有命令操作时,正常执行业务逻辑后发个异步通知(观察者模型),然后对应的视图服务更新到订制的视图中(可以通过redis,mysql,es实现)
+EVENTSOURCE(事件源)数据库中无update,只有insert,会存在数据量过大的问题,解决办法,快照
+AGGRAGATE(聚合)聚合根,对应聚合做持久化模型
+限界上下文:划分服务1.考虑跨聚合">
+<meta property="og:updated_time" content="2018-04-13T05:49:26.141Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="领域驱动小结">
-<meta name="twitter:description" content="CQRS(命令查询责任分离)EVENTSOURCE(事件源)AGGRAGATE(聚合)">
+<meta name="twitter:description" content="CQRS(命令查询责任分离)命令操作和查询操作分开,当有命令操作时,正常执行业务逻辑后发个异步通知(观察者模型),然后对应的视图服务更新到订制的视图中(可以通过redis,mysql,es实现)
+EVENTSOURCE(事件源)数据库中无update,只有insert,会存在数据量过大的问题,解决办法,快照
+AGGRAGATE(聚合)聚合根,对应聚合做持久化模型
+限界上下文:划分服务1.考虑跨聚合">
 
 
 
@@ -341,7 +350,15 @@
       
 
       
-        <h2 id="CQRS-命令查询责任分离"><a href="#CQRS-命令查询责任分离" class="headerlink" title="CQRS(命令查询责任分离)"></a>CQRS(命令查询责任分离)</h2><h2 id="EVENTSOURCE-事件源"><a href="#EVENTSOURCE-事件源" class="headerlink" title="EVENTSOURCE(事件源)"></a>EVENTSOURCE(事件源)</h2><h2 id="AGGRAGATE-聚合"><a href="#AGGRAGATE-聚合" class="headerlink" title="AGGRAGATE(聚合)"></a>AGGRAGATE(聚合)</h2>
+        <h2 id="CQRS-命令查询责任分离"><a href="#CQRS-命令查询责任分离" class="headerlink" title="CQRS(命令查询责任分离)"></a>CQRS(命令查询责任分离)</h2><p>命令操作和查询操作分开,当有命令操作时,正常执行业务逻辑后发个异步通知(观察者模型),然后对应的视图服务更新到订制的视图中(可以通过redis,mysql,es实现)</p>
+<h2 id="EVENTSOURCE-事件源"><a href="#EVENTSOURCE-事件源" class="headerlink" title="EVENTSOURCE(事件源)"></a>EVENTSOURCE(事件源)</h2><p>数据库中无update,只有insert,会存在数据量过大的问题,解决办法,快照</p>
+<h2 id="AGGRAGATE-聚合"><a href="#AGGRAGATE-聚合" class="headerlink" title="AGGRAGATE(聚合)"></a>AGGRAGATE(聚合)</h2><p>聚合根,对应聚合做持久化模型</p>
+<h2 id="限界上下文-划分服务"><a href="#限界上下文-划分服务" class="headerlink" title="限界上下文:划分服务"></a>限界上下文:划分服务</h2><p>1.考虑跨聚合引用最简<br>2.事件风暴</p>
+<h2 id="saga"><a href="#saga" class="headerlink" title="saga"></a>saga</h2><p>事物保证</p>
+<h2 id="与传统的开发模式对比"><a href="#与传统的开发模式对比" class="headerlink" title="与传统的开发模式对比:"></a>与传统的开发模式对比:</h2><h3 id="最终一致性"><a href="#最终一致性" class="headerlink" title="最终一致性"></a>最终一致性</h3><h3 id="业务能力高扩展性"><a href="#业务能力高扩展性" class="headerlink" title="业务能力高扩展性"></a>业务能力高扩展性</h3><p>结合事件源的方式,如果业务中新增展示功能,则只需要新加一个topic解决该问题</p>
+<h3 id="可用性"><a href="#可用性" class="headerlink" title="可用性"></a>可用性</h3><p>天然的读写分离</p>
+<h3 id="性能、伸缩性"><a href="#性能、伸缩性" class="headerlink" title="性能、伸缩性"></a>性能、伸缩性</h3><h3 id="开发难度"><a href="#开发难度" class="headerlink" title="开发难度"></a>开发难度</h3><p><a href="https://blog.csdn.net/aenan/article/details/54928429" target="_blank" rel="external">https://blog.csdn.net/aenan/article/details/54928429</a></p>
+
       
     </div>
 
@@ -372,6 +389,12 @@
     </div>
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/DDD/" rel="tag"># DDD</a>
+          
+        </div>
       
 
       
@@ -486,7 +509,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-count">45</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -521,7 +544,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CQRS-命令查询责任分离"><span class="nav-number">1.</span> <span class="nav-text">CQRS(命令查询责任分离)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EVENTSOURCE-事件源"><span class="nav-number">2.</span> <span class="nav-text">EVENTSOURCE(事件源)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AGGRAGATE-聚合"><span class="nav-number">3.</span> <span class="nav-text">AGGRAGATE(聚合)</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CQRS-命令查询责任分离"><span class="nav-number">1.</span> <span class="nav-text">CQRS(命令查询责任分离)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EVENTSOURCE-事件源"><span class="nav-number">2.</span> <span class="nav-text">EVENTSOURCE(事件源)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AGGRAGATE-聚合"><span class="nav-number">3.</span> <span class="nav-text">AGGRAGATE(聚合)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#限界上下文-划分服务"><span class="nav-number">4.</span> <span class="nav-text">限界上下文:划分服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#saga"><span class="nav-number">5.</span> <span class="nav-text">saga</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#与传统的开发模式对比"><span class="nav-number">6.</span> <span class="nav-text">与传统的开发模式对比:</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最终一致性"><span class="nav-number">6.1.</span> <span class="nav-text">最终一致性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#业务能力高扩展性"><span class="nav-number">6.2.</span> <span class="nav-text">业务能力高扩展性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可用性"><span class="nav-number">6.3.</span> <span class="nav-text">可用性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#性能、伸缩性"><span class="nav-number">6.4.</span> <span class="nav-text">性能、伸缩性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开发难度"><span class="nav-number">6.5.</span> <span class="nav-text">开发难度</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -544,7 +567,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
