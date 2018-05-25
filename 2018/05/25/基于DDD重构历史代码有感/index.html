@@ -103,7 +103,7 @@
 <meta property="og:image" content="http://yoursite.com/img/badflow.png">
 <meta property="og:image" content="http://yoursite.com/img/goodflow.png">
 <meta property="og:image" content="http://yoursite.com/img/fangfu.png">
-<meta property="og:updated_time" content="2018-05-25T12:04:24.628Z">
+<meta property="og:updated_time" content="2018-05-25T12:11:23.674Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于DDD重构历史代码有感">
 <meta name="twitter:description" content="业务中常见问题在业务初期的场景中由于没有明确的模型概念导致代码中大量的持久层引用,这在业务简单的情况下是可以接受的,因为不能预测业务的趋势.随着业务的逐渐扩张,一个service中引入的dao会越来越多,可能多个service中会引用同一个dao,这样如果其中一个dao的表结构变更或者更新逻辑改变则会影响很多地方,导致开发人员在扩展功能的同时要照顾到老的代码引用该dao的地方,所以这时需要引入聚合">
@@ -360,7 +360,20 @@
 <p>通过引入事件的机制我们成功将order和后面一系列的聚合解藕,并提高了代码的复用率.当业务变更时,我只需要新增监听的代码即可,达到了高业务扩展性.</p>
 <h3 id="防腐层引入"><a href="#防腐层引入" class="headerlink" title="防腐层引入"></a>防腐层引入</h3><p>举个例子:</p>
 <p><img src="/img/fangfu.png" alt="img"></p>
-<p>例如:由于业务的变化在生成订单之前需要判断该企业是否有资格创建.我们可能会把校验放到order流程里面,如果业务再次发生变化,根据不同的企业类型去校验不同的属性,则这部分逻辑会严重影响我们下单流程的代码,我们可以将校验这部分抽象化出来,再每次下单之前先去执行相应的校验,成功之后才可以下单.这样校验的逻辑不会影响到我的order代码中,并且可以适应业务后期的校验规则变化</p>
+<p>例如:由于业务的变化在生成订单之前需要判断该企业是否有资格创建.我们可能会把校验放到order流程里面,如果业务再次发生变化,根据不同的企业类型去校验不同的属性,则这部分逻辑会严重影响我们下单流程的代码,我们可以将校验这部分抽象化出来,再每次下单之前先去执行相应的校验,成功之后才可以下单.这样校验的逻辑不会影响到我的order代码中,并且可以适应业务后期的校验规则变化.</p>
+<h2 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h2><ul>
+<li>业务能力高扩展性</li>
+<li>业务分库容易,提高系统性能</li>
+<li>编译速度提升</li>
+<li>解耦系统,减少依赖,开发时不用瞻前顾后</li>
+<li>上线时影响部分变小</li>
+<li>由于异步的机制,系统吞吐量得到提升</li>
+</ul>
+<h2 id="劣势"><a href="#劣势" class="headerlink" title="劣势"></a>劣势</h2><ul>
+<li>需要考虑分布式事物问题</li>
+<li>由于跨服务交互较多,幂等需要考虑</li>
+<li>舍弃了强一致性,可以满足最终一致性</li>
+</ul>
 
       
     </div>
@@ -538,7 +551,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#业务中常见问题"><span class="nav-number">1.</span> <span class="nav-text">业务中常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引入聚合概念"><span class="nav-number">1.1.</span> <span class="nav-text">引入聚合概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#串行流程替换成事件机制"><span class="nav-number">1.2.</span> <span class="nav-text">串行流程替换成事件机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#防腐层引入"><span class="nav-number">1.3.</span> <span class="nav-text">防腐层引入</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#业务中常见问题"><span class="nav-number">1.</span> <span class="nav-text">业务中常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引入聚合概念"><span class="nav-number">1.1.</span> <span class="nav-text">引入聚合概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#串行流程替换成事件机制"><span class="nav-number">1.2.</span> <span class="nav-text">串行流程替换成事件机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#防腐层引入"><span class="nav-number">1.3.</span> <span class="nav-text">防腐层引入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优势"><span class="nav-number">2.</span> <span class="nav-text">优势</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#劣势"><span class="nav-number">3.</span> <span class="nav-text">劣势</span></a></li></ol></div>
             
 
           </div>
