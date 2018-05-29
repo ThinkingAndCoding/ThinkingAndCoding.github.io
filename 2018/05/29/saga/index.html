@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="DDD,saga,领域驱动," />
 
 
 
@@ -93,15 +93,16 @@
 
 
 
-<meta name="description" content="Make my life plan and use my life to perform.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Mr.栋">
-<meta property="og:url" content="http://yoursite.com/page/4/index.html">
+<meta name="description" content="saga微服务公认难点在于一致性,跨服务之间如何保证一致性成为业界难点,在DDD中给出了解决方案,既:长时处理过程(saga),其设计思想可以参照:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="saga">
+<meta property="og:url" content="http://yoursite.com/2018/05/29/saga/index.html">
 <meta property="og:site_name" content="Mr.栋">
-<meta property="og:description" content="Make my life plan and use my life to perform.">
+<meta property="og:description" content="saga微服务公认难点在于一致性,跨服务之间如何保证一致性成为业界难点,在DDD中给出了解决方案,既:长时处理过程(saga),其设计思想可以参照:">
+<meta property="og:updated_time" content="2018-05-29T01:58:00.233Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mr.栋">
-<meta name="twitter:description" content="Make my life plan and use my life to perform.">
+<meta name="twitter:title" content="saga">
+<meta name="twitter:description" content="saga微服务公认难点在于一致性,跨服务之间如何保证一致性成为业界难点,在DDD中给出了解决方案,既:长时处理过程(saga),其设计思想可以参照:">
 
 
 
@@ -129,13 +130,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/page/4/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/05/29/saga/"/>
 
 
 
 
 
-  <title>Mr.栋</title>
+  <title>saga | Mr.栋</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -161,9 +162,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -256,9 +255,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -267,7 +266,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/08/17/事物的隔离级别/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/29/saga/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zhang dong">
@@ -284,9 +283,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2014/08/17/事物的隔离级别/" itemprop="url">事物的隔离级别</a></h1>
+          <h1 class="post-title" itemprop="name headline">saga</h1>
         
 
         <div class="post-meta">
@@ -298,8 +295,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-08-17T12:30:56+08:00">
-                2014-08-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-29T09:55:53+08:00">
+                2018-05-29
               </time>
             
 
@@ -316,7 +313,7 @@
 
           
           
-             <span id="/2014/08/17/事物的隔离级别/" class="leancloud_visitors" data-flag-title="事物的隔离级别">
+             <span id="/2018/05/29/saga/" class="leancloud_visitors" data-flag-title="saga">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -344,319 +341,97 @@
       
 
       
+        <h1 id="saga"><a href="#saga" class="headerlink" title="saga"></a>saga</h1><p>微服务公认难点在于一致性,跨服务之间如何保证一致性成为业界难点,在DDD中给出了解决方案,既:长时处理过程(saga),其设计思想可以参照:<br><a id="more"></a><br><a href="http://microservices.io/patterns/data/saga.html" target="_blank" rel="external">http://microservices.io/patterns/data/saga.html</a>.</p>
+<p>目前我整理一下如果要实现saga需要注意以下几点:</p>
+<ul>
+<li>业务服务自身提供各状态接口</li>
+<li>协调服务提供流程配置能力</li>
+<li>协调服务需要先更新DB再调用业务服务接口,防止协调服务在处理过程中挂掉</li>
+<li>协调服务须提供定时重试机制和删除过期功能</li>
+<li>协调服务保证高可用</li>
+</ul>
+<p>其中提供流程配置能力这项需要考虑以何种方式处理还需要考虑,有两方面因素:</p>
+<ul>
+<li>便于开发人员操作</li>
+<li>便于维护人员后续维护</li>
+</ul>
+<p>希望有好的建议的同学在留言回复噢~</p>
+
+      
+    </div>
+
+    <div>
+      
         
-          <p>数据库事务的隔离级别有4个，由低到高依次为Read uncommitted、Read committed、Repeatable read、Serializable，这四个级别可以逐个解决脏读、不可重复读、幻读这几类问题。<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2014/08/17/事物的隔离级别/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+<div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/img/wechat.jpg" alt="zhang dong wechat" style="width: 200px; max-width: 100%;"/>
+    <div>关注我的微信来交流技术问题吧！</div>
+</div>
+
+
+      
+    </div>
+
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
-      
-    </div>
-
-    <div>
       
     </div>
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/03/13/io/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="zhang dong">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/me.JPG">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.栋">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2014/03/13/io/" itemprop="url">io</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-03-13T11:15:52+08:00">
-                2014-03-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/DDD/" rel="tag"># DDD</a>
           
-            
+            <a href="/tags/saga/" rel="tag"># saga</a>
           
-
+            <a href="/tags/领域驱动/" rel="tag"># 领域驱动</a>
           
-          
-             <span id="/2014/03/13/io/" class="leancloud_visitors" data-flag-title="io">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
+      
 
-    <div class="post-body" itemprop="articleBody">
-
+      
       
       
 
       
-        
-          <h2 id="IO"><a href="#IO" class="headerlink" title="IO"></a>IO</h2><p>缓存 I/O 又被称作标准 I/O，大多数文件系统的默认 I/O 操作都是缓存 I/O。在 Linux 的缓存 I/O 机制中，操作系统会将 I/O 的数据缓存在文件系统的页缓存（ page cache ）中，也就是说，数据会先被拷贝到操作系统内核的缓冲区中，然后才会从操作系统内核的缓冲区拷贝到应用程序的地址空间。</p>
-<p>缓存 I/O 的缺点：<br>数据在传输过程中需要在应用程序地址空间和内核进行多次数据拷贝操作，这些数据拷贝操作所带来的 CPU 以及内存开销是非常大的。<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2014/03/13/io/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/25/基于DDD重构历史代码有感/" rel="next" title="基于DDD重构历史代码有感">
+                <i class="fa fa-chevron-left"></i> 基于DDD重构历史代码有感
+              </a>
+            
           </div>
-          <!--/noindex-->
-        
-      
-    </div>
 
-    <div>
-      
-    </div>
+          <span class="post-nav-divider"></span>
 
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/02/07/java碎碎念/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="zhang dong">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/me.JPG">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.栋">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2013/02/07/java碎碎念/" itemprop="url">java碎碎念</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+          <div class="post-nav-prev post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-02-07T11:34:25+08:00">
-                2013-02-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2013/02/07/java碎碎念/" class="leancloud_visitors" data-flag-title="java碎碎念">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <h3 id="java多线程"><a href="#java多线程" class="headerlink" title="java多线程"></a>java多线程</h3><p>Java语言的关键字，当它用来修饰一个方法或者一个代码块的时候，能够保证在同一时刻最多只有一个线程执行该段代码。</p>
-<pre><code>一、当两个并发线程访问同一个对象object中的这个synchronized(this)同步代码块时，一个时间内只能有一个线程得到执行。另一个线程必须等待当前线程执行完这个代码块以后才能执行该代码块。
-
-二、然而，当一个线程访问object的一个synchronized(this)同步代码块时，另一个线程仍然可以访问该object中的非synchronized(this)同步代码块。
-
-三、尤其关键的是，当一个线程访问object的一个synchronized(this)同步代码块时，其他线程对object中所有其它synchronized(this)同步代码块的访问将被阻塞。
-
-四、第三个例子同样适用其它同步代码块。也就是说，当一个线程访问object的一个synchronized(this)同步代码块时，它就获得了这个object的对象锁。结果，其它线程对该object对象所有同步代码部分的访问都被暂时阻塞。
-
-五、以上规则对其它对象锁同样适用.
-</code></pre>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2013/02/07/java碎碎念/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-  </section>
 
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
-  </nav>
-
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -664,6 +439,12 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNjcyMy8xMzI1OA=="></div>
+    
+  </div>
+
 
         </div>
         
@@ -683,8 +464,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/me.JPG"
@@ -737,6 +527,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#saga"><span class="nav-number">1.</span> <span class="nav-text">saga</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -850,10 +656,10 @@
   
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
 
-  
+
 
   
 
@@ -887,6 +693,17 @@
 
 
 
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
   
 
 
